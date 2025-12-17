@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>页面2 - 聊天窗口</title>
+    <style>
+        .container { width: 600px; margin: 20px auto; }
+        #chat-box {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 400px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+        }
+        .message {
+            margin: 8px 0;
+            padding: 8px 12px;
+            border-radius: 16px;
+            max-width: 70%;
+            clear: both;
+            word-wrap: break-word;
+        }
+        .message-content {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .my-message {
+            background-color: #0084ff;
+            color: white;
+            float: right;
+        }
+        .other-message {
+            background-color: #e5e5e5;
+            color: #333;
+            float: left;
+        }
+        .message-time {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 4px;
+            text-align: right;
+        }
+        .other-message .message-time {
+            text-align: left;
+        }
+        #message-input {
+            width: 450px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+        }
+        #send-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background-color: #0084ff;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        #send-btn:hover {
+            background-color: #0066cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>页面2 聊天窗口</h1>
+        <div id="chat-box"></div>
+        <input type="text" id="message-input" placeholder="输入要发送给页面1的消息...">
+        <button id="send-btn">发送</button>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        const socket = io.connect('http://' + document.domain + ':' + location.port);
+        const chatBox = document.getElementById('chat-box');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // 页面加载时获取聊天历史
+        window.onload = async function() {
+            try {
+                const response = await fetch('/chat_history');
+                const history = await response.json();
+                
+                // 显示聊天历史
+                history.forEach(msg => {
+                    if (msg.type === 'page2_to_page1') {
+                        // 自己发送的消息
+                        addMessageToChat('我', msg.message, msg.time, true);
+                    } else if (msg.type === 'page1_to_page2') {
+                        // 对方发送的消息
+                        addMessageToChat(msg.sender, msg.message, msg.time, false);
+                    }
+                });
+            } catch (error) {
+                console.error('获取聊天历史失败:', error);
+            }
+        };
+
+        // 获取当前时间（格式：HH:MM:SS）
+        function getCurrentTime() {
+            const now = new Date();
+            return now.getHours().toString().padStart(2, '0') + ':' +
+                   now.getMinutes().toString().padStart(2, '0') + ':' +
+                   now.getSeconds().toString().padStart(2, '0');
+        }
+
+        // 添加消息到聊天框
+        function addMessageToChat(sender, message, time, isSelf) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isSelf ? 'my-message' : 'other-message'}`;
+            messageDiv.innerHTML = `
+                <div class="message-content">${message}</div>
+                <div class="message-time">${sender}・${time}</div>
+            `;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // 发送消息
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                const time = getCurrentTime();
+                // 先在自己的聊天框显示消息
+                addMessageToChat('我', message, time, true);
+                // 发送消息到后端
+                socket.emit('send_message_to_page1', { message: message, time: time });
+                // 清空输入框
+                messageInput.value = '';
+            }
+        }
+
+        // 监听发送按钮点击
+        sendBtn.addEventListener('click', sendMessage);
+
+        // 监听回车键
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // 接收来自页面1的消息
+        socket.on('receive_from_page1', (data) => {
+            addMessageToChat(data.sender, data.message, data.time, false);
+        });
+    </script>
+</body>
+</html>

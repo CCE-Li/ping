@@ -1,0 +1,236 @@
+{
+  "products": [
+    {
+      "id": 1000,
+      "name": "Fjallraven - 可折叠背包，适合15寸笔记本电脑",
+      "price": 109.95,
+      "description": "您日常使用和森林散步的完美背包。将笔记本电脑（最大15英寸）放入带衬垫的袖袋，日常物品放入主袋",
+      "image": "https://picsum.photos/id/1/400/400",
+      "categoryId": 3,
+      "rating": 3.9,
+      "count": 120
+    },
+    {
+      "id": 1001,
+      "name": "男士休闲高档修身T恤",
+      "price": 22.3,
+      "description": "修身款式，对比色插肩长袖，三粒扣亨利领，轻薄柔软面料，透气舒适。圆形领口的实心缝制衬衫，经久耐用，适合休闲时尚穿着和铁杆棒球爱好者。亨利式圆形领口包括三粒扣门襟。",
+      "image": "https://picsum.photos/id/2/400/400",
+      "categoryId": 3,
+      "rating": 4.1,
+      "count": 259
+    },
+    {
+      "id": 1002,
+      "name": "男士棉夹克",
+      "price": 55.99,
+      "description": "春秋冬季的优质外套，适用于多种场合，如工作、徒步旅行、露营、登山/攀岩、骑自行车、旅行或其他户外活动。感恩节或圣诞节送给父亲、丈夫或儿子的贴心礼物。",
+      "image": "https://picsum.photos/id/3/400/400",
+      "categoryId": 3,
+      "rating": 4.7,
+      "count": 500
+    },
+    {
+      "id": 1003,
+      "name": "男士休闲修身款",
+      "price": 15.99,
+      "description": "屏幕上的颜色与实际可能略有不同。/ 请注意，每个人的体型不同，因此应在产品描述下方查看详细尺寸信息。",
+      "image": "https://picsum.photos/id/4/400/400",
+      "categoryId": 3,
+      "rating": 2.1,
+      "count": 430
+    },
+    {
+      "id": 1004,
+      "name": "John Hardy 女士传奇 Naga 金与银龙站链式手链",
+      "price": 695.0,
+      "description": "来自我们的传奇系列，Naga 的灵感来自保护海洋珍珠的神话水龙。向内佩戴可获得爱与富足，向外佩戴可获得保护。",
+      "image": "https://picsum.photos/id/5/400/400",
+      "categoryId": 2,
+      "rating": 4.6,
+      "count": 400
+    },
+    {
+      "id": 1005,
+      "name": "纯金小型微镶",
+      "price": 168.0,
+      "description": "满意度保证。30天内可退换任何订单。由美国Hafeez Center设计和销售。满意度保证。30天内可退换任何订单。",
+      "image": "https://picsum.photos/id/6/400/400",
+      "categoryId": 2,
+      "rating": 3.9,
+      "count": 70
+    },
+    {
+      "id": 1006,
+      "name": "白金镀公主款",
+      "price": 9.99,
+      "description": "经典人造婚礼订婚单钻承诺戒指，适合她。送给您的爱人，用于订婚、结婚、周年纪念、情人节等场合。",
+      "image": "https://picsum.photos/id/7/400/400",
+      "categoryId": 2,
+      "rating": 3.0,
+      "count": 400
+    },
+    {
+      "id": 1007,
+      "name": "穿孔猫头鹰玫瑰金镀不锈钢双孔耳环",
+      "price": 10.99,
+      "description": "玫瑰金镀双喇叭隧道插头耳环。由316L不锈钢制成。",
+      "image": "https://picsum.photos/id/8/400/400",
+      "categoryId": 2,
+      "rating": 1.9,
+      "count": 100
+    },
+    {
+      "id": 1008,
+      "name": "WD 2TB Elements 便携式外置硬盘 - USB 3.0",
+      "price": 64.0,
+      "description": "USB 3.0和USB 2.0兼容性，快速数据传输，提升PC性能，高容量；兼容Windows 10、Windows 8.1、Windows 7的NTFS格式；其他操作系统可能需要重新格式化；兼容性可能因用户的硬件配置和操作系统而异。",
+      "image": "https://picsum.photos/id/9/400/400",
+      "categoryId": 1,
+      "rating": 3.3,
+      "count": 203
+    },
+    {
+      "id": 1009,
+      "name": "SanDisk SSD PLUS 1TB 内部固态硬盘 - SATA III 6 Gb/s",
+      "price": 109.0,
+      "description": "轻松升级，提高启动、关闭、应用加载和响应速度（与5400 RPM SATA 2.5英寸硬盘相比；基于发布的规格和使用PCMark vantage分数的内部基准测试）提高突发写入性能，非常适合典型的PC工作负载。性能和可靠性的完美平衡。读写速度高达535MB/s/450MB/s（基于内部测试；性能可能因驱动器容量、主机设备、操作系统和应用程序而异）。",
+      "image": "https://picsum.photos/id/10/400/400",
+      "categoryId": 1,
+      "rating": 2.9,
+      "count": 470
+    },
+    {
+      "id": 1010,
+      "name": "Silicon Power 256GB SSD 3D NAND A55 SLC Cache Performance Boost SATA III 2.5",
+      "price": 109.0,
+      "description": "3D NAND闪存支持更高的密度、性能和可靠性，并降低功耗。最高连续读取速度：560MB/s，最高连续写入速度：530MB/s。",
+      "image": "https://picsum.photos/id/11/400/400",
+      "categoryId": 1,
+      "rating": 4.8,
+      "count": 319
+    },
+    {
+      "id": 1011,
+      "name": "WD 4TB Gaming Drive Works with Playstation 4 Portable External Hard Drive",
+      "price": 114.0,
+      "description": "专为PlayStation 4设计的高性能外接硬盘，提供额外的存储空间，让您可以存储更多游戏。USB 3.0接口，快速数据传输，即插即用，无需额外电源。",
+      "image": "https://picsum.photos/id/12/400/400",
+      "categoryId": 1,
+      "rating": 4.8,
+      "count": 400
+    },
+    {
+      "id": 1012,
+      "name": "Acer SB220Q bi 21.5英寸全高清（1920 x 1080）IPS零边框显示器（HDMI和VGA端口）",
+      "price": 99.99,
+      "description": "21.5英寸全高清IPS显示器，零边框设计，提供广阔的视野。75Hz刷新率，响应时间4ms，减少运动模糊。支持HDMI和VGA输入，适合各种设备连接。",
+      "image": "https://picsum.photos/id/13/400/400",
+      "categoryId": 1,
+      "rating": 2.9,
+      "count": 250
+    },
+    {
+      "id": 1013,
+      "name": "Samsung 27英寸曲面显示器（LC27F398FWNXZA）- 黑色",
+      "price": 149.99,
+      "description": "27英寸曲面显示器，1920x1080全高清分辨率，1800R曲率，提供沉浸式视觉体验。AMD FreeSync技术，减少屏幕撕裂。4ms响应时间，75Hz刷新率，适合游戏和多媒体应用。",
+      "image": "https://picsum.photos/id/14/400/400",
+      "categoryId": 1,
+      "rating": 2.2,
+      "count": 140
+    },
+    {
+      "id": 1014,
+      "name": "女士丝绸印花连衣裙",
+      "price": 50.99,
+      "description": "优雅的丝绸印花连衣裙，适合各种场合。舒适的面料，流畅的剪裁，展现女性优雅气质。多种花色可选，适合不同风格的搭配。",
+      "image": "https://picsum.photos/id/15/400/400",
+      "categoryId": 4,
+      "rating": 4.7,
+      "count": 340
+    },
+    {
+      "id": 1015,
+      "name": "女士高领毛衣",
+      "price": 45.99,
+      "description": "柔软舒适的高领毛衣，保暖又时尚。修身设计，展现身材曲线。多种颜色可选，适合搭配不同的下装。",
+      "image": "https://picsum.photos/id/16/400/400",
+      "categoryId": 4,
+      "rating": 4.5,
+      "count": 230
+    },
+    {
+      "id": 1016,
+      "name": "女士牛仔短裤",
+      "price": 35.99,
+      "description": "经典的牛仔短裤，适合夏季穿着。舒适的面料，修身剪裁，展现腿部线条。多种长度可选，适合不同身材的女性。",
+      "image": "https://picsum.photos/id/17/400/400",
+      "categoryId": 4,
+      "rating": 4.3,
+      "count": 190
+    },
+    {
+      "id": 1017,
+      "name": "男士休闲运动鞋",
+      "price": 65.99,
+      "description": "舒适的休闲运动鞋，适合日常穿着。轻便的设计，良好的缓震效果，减少行走疲劳。多种颜色可选，适合不同风格的搭配。",
+      "image": "https://picsum.photos/id/18/400/400",
+      "categoryId": 3,
+      "rating": 4.6,
+      "count": 280
+    },
+    {
+      "id": 1018,
+      "name": "男士商务皮鞋",
+      "price": 85.99,
+      "description": "优雅的商务皮鞋，适合正式场合。优质的皮革材质，精湛的工艺，展现专业形象。舒适的内里，长时间穿着也不会感到疲劳。",
+      "image": "https://picsum.photos/id/19/400/400",
+      "categoryId": 3,
+      "rating": 4.4,
+      "count": 210
+    },
+    {
+      "id": 1019,
+      "name": "女士时尚手提包",
+      "price": 75.99,
+      "description": "时尚的女士手提包，适合各种场合。大容量设计，可容纳日常所需物品。优质的材质，精湛的工艺，展现女性优雅气质。多种颜色可选，适合不同风格的搭配。",
+      "image": "https://picsum.photos/id/20/400/400",
+      "categoryId": 4,
+      "rating": 4.2,
+      "count": 180
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "全部"
+    },
+    {
+      "id": 2,
+      "name": "电子产品"
+    },
+    {
+      "id": 3,
+      "name": "服装鞋帽"
+    },
+    {
+      "id": 4,
+      "name": "女士服装"
+    }
+  ],
+  "featuredCategories": [
+    {
+      "id": 2,
+      "name": "电子产品",
+      "count": 10,
+      "image": "https://picsum.photos/id/96/300/300"
+    },
+    {
+      "id": 3,
+      "name": "服装鞋帽",
+      "count": 10,
+      "image": "https://picsum.photos/id/24/300/300"
+    }
+  ]
+}

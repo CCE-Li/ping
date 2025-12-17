@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #213547;
+  background-color: #f8f9fa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* 自定义颜色变量 - 支持Tailwind类使用 */
+  --primary-color: #27AE60;
+  --secondary-color: #E53935;
+  --background-color: #f8f9fa;
+  --card-background: #ffffff;
+  --text-primary: #213547;
+  --text-secondary: #666666;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --yellow-400: #facc15;
+  --red-500: #ef4444;
+}
+
+/* 为Tailwind添加自定义类支持 */
+@layer utilities {
+  .bg-primary { background-color: var(--primary-color); }
+  .bg-secondary { background-color: var(--secondary-color); }
+  .bg-gray-50 { background-color: var(--gray-50); }
+  .bg-gray-100 { background-color: var(--gray-100); }
+  .bg-gray-200 { background-color: var(--gray-200); }
+  .bg-gray-300 { background-color: var(--gray-300); }
+  .bg-gray-400 { background-color: var(--gray-400); }
+  .bg-gray-500 { background-color: var(--gray-500); }
+  .bg-gray-600 { background-color: var(--gray-600); }
+  .bg-gray-700 { background-color: var(--gray-700); }
+  .bg-gray-800 { background-color: var(--gray-800); }
+  .bg-gray-900 { background-color: var(--gray-900); }
+  .bg-yellow-400 { background-color: var(--yellow-400); }
+  .bg-red-500 { background-color: var(--red-500); }
+  
+  .text-primary { color: var(--primary-color); }
+  .text-secondary { color: var(--secondary-color); }
+  .text-gray-50 { color: var(--gray-50); }
+  .text-gray-100 { color: var(--gray-100); }
+  .text-gray-200 { color: var(--gray-200); }
+  .text-gray-300 { color: var(--gray-300); }
+  .text-gray-400 { color: var(--gray-400); }
+  .text-gray-500 { color: var(--gray-500); }
+  .text-gray-600 { color: var(--gray-600); }
+  .text-gray-700 { color: var(--gray-700); }
+  .text-gray-800 { color: var(--gray-800); }
+  .text-gray-900 { color: var(--gray-900); }
+  .text-yellow-400 { color: var(--yellow-400); }
+  .text-red-500 { color: var(--red-500); }
+  
+  .border-primary { border-color: var(--primary-color); }
+  .border-secondary { border-color: var(--secondary-color); }
+  .border-gray-50 { border-color: var(--gray-50); }
+  .border-gray-100 { border-color: var(--gray-100); }
+  .border-gray-200 { border-color: var(--gray-200); }
+  .border-gray-300 { border-color: var(--gray-300); }
+  .border-gray-400 { border-color: var(--gray-400); }
+  .border-gray-500 { border-color: var(--gray-500); }
+  
+  .ring-primary { --tw-ring-color: var(--primary-color); }
+  .ring-secondary { --tw-ring-color: var(--secondary-color); }
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--background-color);
+}
+
+#app {
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* 自定义动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 自定义组件样式 */
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-primary:hover {
+  background-color: rgba(39, 174, 96, 0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(39, 174, 96, 0.15);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(229, 57, 53, 0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(229, 57, 53, 0.15);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+.card {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition: all 0.3s ease;
+  background-color: var(--card-background);
+  overflow: hidden;
+}
+
+.card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-color: #d1d5db;
+}
+
+/* 自定义工具类 */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* 响应式优化 */
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 1280px) {
+  .container {
+    max-width: 1000px;
+  }
+}

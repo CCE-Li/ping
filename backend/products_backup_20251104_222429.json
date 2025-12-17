@@ -1,0 +1,503 @@
+[
+  {
+    "id": 1565,
+    "name": "豪华登山包 292",
+    "price": 1118,
+    "description": "豪华登山包 292，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/295/400/400",
+    "categoryId": 6,
+    "rating": 4.8
+  },
+  {
+    "id": 8939,
+    "name": "豪华饮料 820",
+    "price": 464,
+    "description": "豪华饮料 820，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/684/400/400",
+    "categoryId": 5,
+    "rating": 4.2
+  },
+  {
+    "id": 7433,
+    "name": "高级巧克力 763",
+    "price": 948,
+    "description": "高级巧克力 763，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/1/400/400",
+    "categoryId": 5,
+    "rating": 4.3
+  },
+  {
+    "id": 9961,
+    "name": "豪华游戏鼠标 457",
+    "price": 3539,
+    "description": "豪华游戏鼠标 457，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/676/400/400",
+    "categoryId": 2,
+    "rating": 4.1,
+    "discount": 82,
+    "discountPrice": 2901,
+    "originalPrice": 3539
+  },
+  {
+    "id": 8362,
+    "name": "智能篮球 605",
+    "price": 1151,
+    "description": "智能篮球 605，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/727/400/400",
+    "categoryId": 6,
+    "rating": 4.1
+  },
+  {
+    "id": 2118,
+    "name": "超级巧克力 870",
+    "price": 89,
+    "description": "超级巧克力 870，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/260/400/400",
+    "categoryId": 5,
+    "rating": 4.6,
+    "discount": 73,
+    "discountPrice": 64,
+    "originalPrice": 89
+  },
+  {
+    "id": 2855,
+    "name": "优质地毯 395",
+    "price": 4531,
+    "description": "优质地毯 395，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/15/400/400",
+    "categoryId": 4,
+    "rating": 4.7
+  },
+  {
+    "id": 2062,
+    "name": "新型帐篷 919",
+    "price": 2117,
+    "description": "新型帐篷 919，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/493/400/400",
+    "categoryId": 6,
+    "rating": 4.9,
+    "discount": 90,
+    "discountPrice": 1905,
+    "originalPrice": 2117
+  },
+  {
+    "id": 8872,
+    "name": "全能休闲牛仔裤 520",
+    "price": 123,
+    "description": "全能休闲牛仔裤 520，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/588/400/400",
+    "categoryId": 3,
+    "rating": 5.0,
+    "discount": 78,
+    "discountPrice": 95,
+    "originalPrice": 123
+  },
+  {
+    "id": 5909,
+    "name": "时尚连帽卫衣 531",
+    "price": 544,
+    "description": "时尚连帽卫衣 531，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/413/400/400",
+    "categoryId": 3,
+    "rating": 4.6,
+    "discount": 70,
+    "discountPrice": 380,
+    "originalPrice": 544
+  },
+  {
+    "id": 4149,
+    "name": "时尚衣柜 721",
+    "price": 3226,
+    "description": "时尚衣柜 721，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/690/400/400",
+    "categoryId": 4,
+    "rating": 4.1,
+    "discount": 81,
+    "discountPrice": 2613,
+    "originalPrice": 3226
+  },
+  {
+    "id": 6417,
+    "name": "智能移动电源 824",
+    "price": 7822,
+    "description": "智能移动电源 824，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/700/400/400",
+    "categoryId": 2,
+    "rating": 4.5
+  },
+  {
+    "id": 6668,
+    "name": "优质帽子 385",
+    "price": 610,
+    "description": "优质帽子 385，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/488/400/400",
+    "categoryId": 3,
+    "rating": 4.4
+  },
+  {
+    "id": 1861,
+    "name": "全能游戏鼠标 735",
+    "price": 7130,
+    "description": "全能游戏鼠标 735，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/667/400/400",
+    "categoryId": 2,
+    "rating": 4.7,
+    "discount": 72,
+    "discountPrice": 5133,
+    "originalPrice": 7130
+  },
+  {
+    "id": 7126,
+    "name": "专业智能音箱 256",
+    "price": 4448,
+    "description": "专业智能音箱 256，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/412/400/400",
+    "categoryId": 2,
+    "rating": 4.9
+  },
+  {
+    "id": 2423,
+    "name": "经典无线充电器 722",
+    "price": 9989,
+    "description": "经典无线充电器 722，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/360/400/400",
+    "categoryId": 2,
+    "rating": 4.0,
+    "discount": 80,
+    "discountPrice": 7991,
+    "originalPrice": 9989
+  },
+  {
+    "id": 5943,
+    "name": "时尚围巾 292",
+    "price": 1980,
+    "description": "时尚围巾 292，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/739/400/400",
+    "categoryId": 3,
+    "rating": 4.5
+  },
+  {
+    "id": 7531,
+    "name": "高级篮球 280",
+    "price": 736,
+    "description": "高级篮球 280，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/932/400/400",
+    "categoryId": 6,
+    "rating": 4.9
+  },
+  {
+    "id": 3162,
+    "name": "高级饼干 773",
+    "price": 915,
+    "description": "高级饼干 773，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/188/400/400",
+    "categoryId": 5,
+    "rating": 4.8,
+    "discount": 75,
+    "discountPrice": 686,
+    "originalPrice": 915
+  },
+  {
+    "id": 8014,
+    "name": "豪华地毯 291",
+    "price": 518,
+    "description": "豪华地毯 291，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/454/400/400",
+    "categoryId": 4,
+    "rating": 4.0
+  },
+  {
+    "id": 5217,
+    "name": "时尚连帽卫衣 970",
+    "price": 1938,
+    "description": "时尚连帽卫衣 970，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/122/400/400",
+    "categoryId": 3,
+    "rating": 4.4
+  },
+  {
+    "id": 8044,
+    "name": "超级游戏机 663",
+    "price": 6964,
+    "description": "超级游戏机 663，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/893/400/400",
+    "categoryId": 2,
+    "rating": 4.0,
+    "discount": 90,
+    "discountPrice": 6267,
+    "originalPrice": 6964
+  },
+  {
+    "id": 4888,
+    "name": "专业饮料 403",
+    "price": 614,
+    "description": "专业饮料 403，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/656/400/400",
+    "categoryId": 5,
+    "rating": 4.6
+  },
+  {
+    "id": 5572,
+    "name": "全能休闲牛仔裤 411",
+    "price": 1929,
+    "description": "全能休闲牛仔裤 411，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/235/400/400",
+    "categoryId": 3,
+    "rating": 4.6
+  },
+  {
+    "id": 5492,
+    "name": "经典酸奶 877",
+    "price": 419,
+    "description": "经典酸奶 877，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/882/400/400",
+    "categoryId": 5,
+    "rating": 4.5
+  },
+  {
+    "id": 2058,
+    "name": "高级床 633",
+    "price": 1500,
+    "description": "高级床 633，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/370/400/400",
+    "categoryId": 4,
+    "rating": 5.0
+  },
+  {
+    "id": 6715,
+    "name": "高级时尚T恤 530",
+    "price": 947,
+    "description": "高级时尚T恤 530，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/675/400/400",
+    "categoryId": 3,
+    "rating": 5.0
+  },
+  {
+    "id": 3141,
+    "name": "豪华衣柜 436",
+    "price": 544,
+    "description": "豪华衣柜 436，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/766/400/400",
+    "categoryId": 4,
+    "rating": 4.3
+  },
+  {
+    "id": 3633,
+    "name": "时尚平板电脑 417",
+    "price": 6498,
+    "description": "时尚平板电脑 417，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/416/400/400",
+    "categoryId": 2,
+    "rating": 4.3
+  },
+  {
+    "id": 4777,
+    "name": "经典哑铃 475",
+    "price": 1786,
+    "description": "经典哑铃 475，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/314/400/400",
+    "categoryId": 6,
+    "rating": 4.3
+  },
+  {
+    "id": 9135,
+    "name": "高级休闲牛仔裤 953",
+    "price": 1123,
+    "description": "高级休闲牛仔裤 953，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/668/400/400",
+    "categoryId": 3,
+    "rating": 4.1
+  },
+  {
+    "id": 7646,
+    "name": "全能牛奶 101",
+    "price": 756,
+    "description": "全能牛奶 101，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/438/400/400",
+    "categoryId": 5,
+    "rating": 4.0
+  },
+  {
+    "id": 4568,
+    "name": "专业睡袋 438",
+    "price": 1461,
+    "description": "专业睡袋 438，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/805/400/400",
+    "categoryId": 6,
+    "rating": 4.6
+  },
+  {
+    "id": 8790,
+    "name": "豪华时尚T恤 877",
+    "price": 680,
+    "description": "豪华时尚T恤 877，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/916/400/400",
+    "categoryId": 3,
+    "rating": 4.9
+  },
+  {
+    "id": 8311,
+    "name": "豪华自行车 235",
+    "price": 1496,
+    "description": "豪华自行车 235，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/797/400/400",
+    "categoryId": 6,
+    "rating": 4.8,
+    "discount": 79,
+    "discountPrice": 1181,
+    "originalPrice": 1496
+  },
+  {
+    "id": 4680,
+    "name": "新型智能手环 257",
+    "price": 5237,
+    "description": "新型智能手环 257，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/406/400/400",
+    "categoryId": 2,
+    "rating": 4.7
+  },
+  {
+    "id": 4704,
+    "name": "全能电视柜 443",
+    "price": 1765,
+    "description": "全能电视柜 443，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/177/400/400",
+    "categoryId": 4,
+    "rating": 4.6
+  },
+  {
+    "id": 1231,
+    "name": "优质酸奶 736",
+    "price": 346,
+    "description": "优质酸奶 736，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/323/400/400",
+    "categoryId": 5,
+    "rating": 4.0
+  },
+  {
+    "id": 2977,
+    "name": "智能坚果 825",
+    "price": 828,
+    "description": "智能坚果 825，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/579/400/400",
+    "categoryId": 5,
+    "rating": 4.6,
+    "discount": 78,
+    "discountPrice": 645,
+    "originalPrice": 828
+  },
+  {
+    "id": 2236,
+    "name": "新型篮球 204",
+    "price": 2150,
+    "description": "新型篮球 204，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/967/400/400",
+    "categoryId": 6,
+    "rating": 4.1,
+    "discount": 80,
+    "discountPrice": 1720,
+    "originalPrice": 2150
+  },
+  {
+    "id": 7723,
+    "name": "新型沙发 459",
+    "price": 5671,
+    "description": "新型沙发 459，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/220/400/400",
+    "categoryId": 4,
+    "rating": 4.6
+  },
+  {
+    "id": 6313,
+    "name": "超级果汁 385",
+    "price": 805,
+    "description": "超级果汁 385，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/395/400/400",
+    "categoryId": 5,
+    "rating": 4.2,
+    "discount": 70,
+    "discountPrice": 563,
+    "originalPrice": 805
+  },
+  {
+    "id": 7700,
+    "name": "新型智能手环 876",
+    "price": 8378,
+    "description": "新型智能手环 876，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/895/400/400",
+    "categoryId": 2,
+    "rating": 4.4,
+    "discount": 70,
+    "discountPrice": 5864,
+    "originalPrice": 8378
+  },
+  {
+    "id": 4766,
+    "name": "超级移动电源 507",
+    "price": 8107,
+    "description": "超级移动电源 507，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/4/400/400",
+    "categoryId": 2,
+    "rating": 4.8
+  },
+  {
+    "id": 9490,
+    "name": "全能帐篷 424",
+    "price": 2736,
+    "description": "全能帐篷 424，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/420/400/400",
+    "categoryId": 6,
+    "rating": 4.5,
+    "discount": 91,
+    "discountPrice": 2489,
+    "originalPrice": 2736
+  },
+  {
+    "id": 6767,
+    "name": "智能帽子 124",
+    "price": 1437,
+    "description": "智能帽子 124，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/539/400/400",
+    "categoryId": 3,
+    "rating": 4.6,
+    "discount": 77,
+    "discountPrice": 1106,
+    "originalPrice": 1437
+  },
+  {
+    "id": 3035,
+    "name": "新型无线充电器 358",
+    "price": 1310,
+    "description": "新型无线充电器 358，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/879/400/400",
+    "categoryId": 2,
+    "rating": 4.7
+  },
+  {
+    "id": 7550,
+    "name": "超级沙发 384",
+    "price": 1049,
+    "description": "超级沙发 384，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/557/400/400",
+    "categoryId": 4,
+    "rating": 4.6
+  },
+  {
+    "id": 6146,
+    "name": "优质饮料 772",
+    "price": 35,
+    "description": "优质饮料 772，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/806/400/400",
+    "categoryId": 5,
+    "rating": 4.0
+  },
+  {
+    "id": 9501,
+    "name": "超级智能手表 634",
+    "price": 4734,
+    "description": "超级智能手表 634，品质保证，物超所值，是您的理想选择。",
+    "image": "https://picsum.photos/id/307/400/400",
+    "categoryId": 2,
+    "rating": 4.5
+  }
+]

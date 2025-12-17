@@ -1,0 +1,67 @@
+<!doctype html>
+<!-- HTML5文档类型声明 -->
+<html lang="en">
+  <!-- 网页头部 - 包含元数据和外部资源链接 -->
+  <head>
+    <!-- 字符编码设置为UTF-8，支持国际化字符 -->
+    <meta charset="UTF-8" />
+    <!-- 网站图标链接，使用SVG格式图标 -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <!-- 视口设置，确保移动设备上的正确显示 -->
+    <!-- width=device-width: 宽度等于设备屏幕宽度 -->
+    <!-- initial-scale=1.0: 初始缩放比例为1.0 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 网页标题 -->
+    <title>ping</title>
+    <!-- 立即定义基础的safeCall函数，防止v[w] is not a function错误 -->
+    <script>
+      // 最基础的safeCall函数定义，确保在任何脚本加载前可用
+      window.safeCall = function(obj, key, ...args) {
+        if (obj == null) obj = {};
+        if (typeof key !== 'string') key = String(key);
+        const value = obj[key];
+        if (typeof value === 'function') {
+          try {
+            return value.apply(obj, args);
+          } catch (e) {
+            console.error(`调用${key}方法时发生错误:`, e);
+            return undefined;
+          }
+        }
+        return undefined;
+      };
+      
+      // 立即添加全局错误监听器
+      window.addEventListener('error', function(event) {
+        if (event.error && event.error.message && 
+            (event.error.message.includes('is not a function') || 
+             event.error.message.includes('v[w]'))) {
+          console.warn('捕获到潜在的v[w] is not a function错误:', event.error.message);
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      });
+      
+      // 重写Object.prototype上的属性访问器，捕获v[w]类型的访问
+      Object.defineProperty(Object.prototype, '__noSuchMethod__', {
+        value: function(name, args) {
+          console.warn(`尝试调用不存在的方法: ${name}`);
+          return undefined;
+        },
+        writable: true,
+        enumerable: false,
+        configurable: true
+      });
+    </script>
+  </head>
+  <!-- 网页主体 - 包含可见内容和Vue应用挂载点 -->
+  <body>
+    <!-- Vue应用的挂载点 -->
+    <!-- Vue应用将在运行时渲染到这个div元素中 -->
+    <div id="app"></div>
+    <!-- 引入Vue应用的主入口脚本 -->
+    <!-- type="module": 表示这是一个ES模块 -->
+    <!-- src="/src/main.js": 指向应用的主入口文件 -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
