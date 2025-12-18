@@ -534,13 +534,4 @@ const dataURLToBlob = (dataURL) => {
 .text-primary {
   color: #4f46e5;
 }
-/* 全局样式 - 注册页面隐藏导航栏 */
-:global(.bottom-nav) {
-  display: none !important;
-}
-
-:global(header.bg-white.shadow-sm) {
-  display: none !important;
-}
-
 </style>

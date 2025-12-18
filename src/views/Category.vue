@@ -24,22 +24,35 @@
       </div>
       
       <!-- 分类导航 -->
-      <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
-        <div class="flex overflow-x-auto space-x-4 pb-2 -mx-1 px-1 hide-scrollbar">
+      <div class="bg-white rounded-lg shadow-sm p-4 mb-6 relative z-10 pointer-events-auto">
+        <div class="flex overflow-x-auto space-x-4 pb-2 -mx-1 px-1 hide-scrollbar relative z-10 pointer-events-auto">
           <button 
             v-for="category in categories" 
             :key="category.id"
             class="px-4 py-2 rounded-full whitespace-nowrap transition-all duration-300"
             :class="selectedCategory === category.id ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
-            @click="selectedCategory = category.id"
+            type="button"
+            :aria-pressed="String(selectedCategory) === String(category.id)"
+            @click="handleCategoryClick(category.id)"
           >
             {{ category.name }}
           </button>
         </div>
       </div>
       
+      <div v-if="loading" class="bg-white rounded-lg p-6 text-gray-600 text-sm mb-6">
+        加载中...
+      </div>
+
+      <div v-else-if="loadError" class="bg-white rounded-lg p-6 mb-6">
+        <p class="text-sm text-red-600">{{ loadError }}</p>
+        <button class="mt-3 text-sm text-primary bg-primary/10 px-3 py-1 rounded-full" type="button" @click="fetchData">
+          重试
+        </button>
+      </div>
+
       <!-- 分类内容展示 -->
-      <div v-if="currentCategoryProducts.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div v-else-if="currentCategoryProducts.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <div 
           v-for="product in currentCategoryProducts" 
           :key="product.id"
@@ -70,7 +83,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { productApi, categoryApi } from '../utils/api'
 import { formatPrice } from '../utils/productDataUtils'
@@ -80,11 +93,13 @@ const selectedCategory = ref('')
 const categories = ref([{ id: '', name: '全部分类' }])
 const products = ref([])
 const loading = ref(false)
+const loadError = ref('')
 
 // 从API获取数据
 const fetchData = async () => {
   try {
     loading.value = true
+    loadError.value = ''
     // 获取分类数据
     const categoriesResponse = await categoryApi.getAll()
     categories.value = [
@@ -98,16 +113,18 @@ const fetchData = async () => {
     products.value = productsResponse.results || []
   } catch (error) {
     console.error('获取分类和商品数据失败:', error)
+    loadError.value = error?.message || '获取分类或商品失败'
   } finally {
     loading.value = false
   }
 }
 
-onMounted(() => {
-  fetchData()
-})
+const handleCategoryClick = async (categoryId) => {
+  selectedCategory.value = categoryId
+  await fetchData()
+}
 
-watch(selectedCategory, () => {
+onMounted(() => {
   fetchData()
 })
 

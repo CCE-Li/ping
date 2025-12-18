@@ -15,6 +15,12 @@ const routes = [
     name: 'Category',
     component: () => import('../views/Category.vue')
   },
+  // 智能客服路由
+  {
+    path: '/service',
+    name: 'AIService',
+    component: () => import('../views/AIService.vue')
+  },
   // 消息页路由
   {
     path: '/message',

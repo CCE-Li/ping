@@ -10,7 +10,7 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
-const showNavPages = computed(() => ['/', '/category', '/message', '/cart', '/profile'].includes(route.path))
+const showNavPages = computed(() => ['/', '/category', '/message', '/cart', '/profile', '/service'].includes(route.path))
 </script>
 
 <template>

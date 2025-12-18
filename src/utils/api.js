@@ -290,6 +290,18 @@ export const messageApi = {
   }
 }
 
+// AI 智能客服 API
+export const aiApi = {
+  chat: async ({ user_id, msg }) => {
+    const response = await apiClient.post('/ai_chat', { user_id, msg })
+    return response.data || {}
+  },
+  transfer: async ({ user_id }) => {
+    const response = await apiClient.post('/transfer_service', { user_id })
+    return response.data || {}
+  }
+}
+
 // 用户API
 export const userApi = {
   // 登录
