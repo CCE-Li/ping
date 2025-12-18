@@ -7,7 +7,7 @@ from config import (
     TRAE_IDE_API_KEY,
     VOLC_API_URL,
     VOLC_API_KEY,
-    VOLC_SECRET_KEY,
+    VOLC_MODEL,
     TRAE_API_URL,
     TRAE_API_KEY,
     TRAE_SECRET_KEY,
@@ -98,12 +98,16 @@ def get_ai_reply(question, user_id=None):
             }
         elif AI_SERVICE_SCHEME == 2:  # 方案2：字节火山方舟
             api_url = VOLC_API_URL
+            if not VOLC_API_KEY:
+                raise RuntimeError("VOLC_API_KEY 未配置，请设置环境变量 VOLC_API_KEY")
+            if not VOLC_MODEL:
+                raise RuntimeError("VOLC_MODEL 未配置，请设置环境变量 VOLC_MODEL（控制台创建推理接入点 Endpoint 后获得）")
             headers = {
                 "Content-Type": "application/json",
-                "Authorization": f"Bearer {VOLC_API_KEY}:{VOLC_SECRET_KEY}"
+                "Authorization": f"Bearer {VOLC_API_KEY}",
             }
             api_data = {
-                "model": "trae-7b-chat",  # 火山方舟支持的模型名称
+                "model": VOLC_MODEL,
                 "messages": [{"role": "user", "content": prompt}],
                 "temperature": 0.3,
                 "max_tokens": 200
@@ -123,7 +127,12 @@ def get_ai_reply(question, user_id=None):
             }
 
         res = requests.post(api_url, headers=headers, json=api_data, timeout=10)
-        ai_reply = res.json()["choices"][0]["message"]["content"].strip()
+        res.raise_for_status()
+        payload = res.json() if res.content else {}
+        ai_reply = (((payload.get("choices") or [{}])[0]).get("message") or {}).get("content")
+        if not ai_reply:
+            raise RuntimeError(f"AI 服务返回异常: {payload}")
+        ai_reply = ai_reply.strip()
 
         # 记录会话
         if user_id:
