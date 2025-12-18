@@ -9,7 +9,7 @@
         <el-button type="primary" text @click="$router.push('/shopping')">继续逛逛</el-button>
       </div>
     </div>
-//购物车界面
+// Cart Content
     <div class="cart-content wrapper">
       <el-card shadow="never">
         <template #header>
