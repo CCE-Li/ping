@@ -1,50 +1,75 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 login-page">
     <div class="max-w-md w-full space-y-12 bg-white rounded-3xl shadow-2xl overflow-hidden">
-      <div class="px-16 py-16">
+      <div class="px-6 sm:px-12 lg:px-14 py-12 sm:py-14">
         <div class="text-center mb-16">
           <h2 class="text-5xl font-bold text-gray-900">用户登录</h2>
           <p class="mt-6 text-xl text-gray-600">欢迎回来，请登录您的账号</p>
         </div>
         
-        <form @submit.prevent="login" class="mt-8 space-y-8">
+        <form @submit.prevent="login" class="login-form mt-8 space-y-8 max-w-sm mx-auto">
           <div class="space-y-6">
             <div>
               <label for="username" class="block text-xl font-medium text-gray-700 mb-3">
                 账号
               </label>
-              <input 
-                id="username" 
-                v-model="formData.username" 
-                type="text" 
-                class="block w-full px-6 py-6 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xl"
-                placeholder="请输入手机号"
-                required
-              >
+              <div class="input-wrap">
+                <span class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <input
+                  id="username"
+                  v-model="formData.username"
+                  type="text"
+                  autocomplete="username"
+                  class="input-field block w-full pl-12 pr-4 py-4 rounded-xl text-lg"
+                  placeholder="请输入手机号"
+                  required
+                >
+              </div>
             </div>
             
             <div>
               <label for="password" class="block text-xl font-medium text-gray-700 mb-3">
                 密码
               </label>
-              <input 
-                id="password" 
-                v-model="formData.password" 
-                type="password" 
-                class="block w-full px-6 py-6 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xl"
-                placeholder="请输入密码"
-                required
-                minlength="6"
-                maxlength="20"
-              >
+              <div class="input-wrap">
+                <span class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 11H7a4 4 0 0 0-4 4v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a4 4 0 0 0-4-4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <input
+                  id="password"
+                  v-model="formData.password"
+                  type="password"
+                  autocomplete="current-password"
+                  class="input-field block w-full pl-12 pr-4 py-4 rounded-xl text-lg"
+                  placeholder="请输入密码"
+                  required
+                  minlength="6"
+                  maxlength="20"
+                >
+              </div>
             </div>
           </div>
           
           <div>
-            <button type="submit" class="btn-primary w-full py-6 px-4 rounded-xl text-xl font-medium" :disabled="loading || faceVerifying">
+            <el-button
+              native-type="submit"
+              type="primary"
+              size="large"
+              class="w-full"
+              :loading="loading"
+              :disabled="loading || faceVerifying"
+            >
               <span v-if="loading" class="animate-pulse">登录中...</span>
               <span v-else>登录</span>
-            </button>
+            </el-button>
           </div>
           
           <!-- 分割线 -->
@@ -80,23 +105,24 @@
                 </div>
               </div>
               <div class="flex gap-6 justify-center">
-                <button 
-                  type="button" 
-                  class="btn-green px-10 py-5 rounded-xl transition-all duration-200 text-xl font-medium"
-                  @click="startFaceLogin"
+                <el-button
+                  type="success"
+                  size="large"
+                  :loading="faceVerifying"
                   :disabled="faceVerifying || loading"
+                  @click="startFaceLogin"
                 >
                   <span v-if="faceVerifying" class="animate-pulse">验证中...</span>
                   <span v-else>人脸快捷登录</span>
-                </button>
-                <button 
-                  v-if="faceVerifying" 
-                  type="button" 
-                  class="btn-red px-10 py-5 rounded-xl transition-all duration-200 text-xl font-medium"
+                </el-button>
+                <el-button
+                  v-if="faceVerifying"
+                  type="danger"
+                  size="large"
                   @click="stopFaceLogin"
                 >
                   停止验证
-                </button>
+                </el-button>
               </div>
             </div>
           </div>
@@ -350,6 +376,68 @@ const stopFaceLogin = async () => {
 }
 </script>
 <style scoped>
+.login-form {
+  width: 100%;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.input-wrap {
+  position: relative;
+}
+
+.input-icon {
+  pointer-events: none;
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  padding-left: 1rem;
+  display: flex;
+  align-items: center;
+  color: rgba(107, 114, 128, 0.9);
+}
+
+.input-field {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(209, 213, 219, 0.9);
+  color: rgba(17, 24, 39, 0.92);
+  outline: none;
+  transition: all 0.18s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.input-field::placeholder {
+  color: rgba(107, 114, 128, 0.85);
+}
+
+.input-field:hover:not(:disabled) {
+  border-color: rgba(156, 163, 175, 0.95);
+  box-shadow: 0 2px 10px rgba(79, 70, 229, 0.06);
+}
+
+.input-field:focus {
+  border-color: rgba(79, 70, 229, 0.55);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+}
+
+.input-wrap:focus-within .input-icon {
+  color: rgba(79, 70, 229, 0.9);
+}
+
+.input-field:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.input-field:-webkit-autofill,
+.input-field:-webkit-autofill:hover,
+.input-field:-webkit-autofill:focus {
+  -webkit-text-fill-color: rgba(17, 24, 39, 0.92);
+  transition: background-color 9999s ease-out 0s;
+  box-shadow: 0 0 0 9999px rgba(255, 255, 255, 0.96) inset;
+}
+
 .btn-primary {
   background-color: #4f46e5;
   color: white;

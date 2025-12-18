@@ -10,6 +10,9 @@ import router from './router'
 import { pinia } from './stores'
 // 导入axios用于全局拦截器
 import axios from 'axios'
+// Element Plus
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 // 导入环境检测工具
 import environmentDetector, { getEnvironmentInfo, isIOS, isAndroid, isHybrid, isDevelopment } from './utils/environmentDetector'
 
@@ -364,6 +367,11 @@ console.log('路由插件注册成功')
 console.log('注册Pinia状态管理插件...')
 app.use(pinia)
 console.log('Pinia状态管理插件注册成功')
+
+// 注册 Element Plus
+console.log('注册Element Plus...')
+app.use(ElementPlus)
+console.log('Element Plus注册成功')
 
 //// 集成环境检测工具
 window.environmentDetector = environmentDetector
