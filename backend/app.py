@@ -2,6 +2,8 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 import os
 
+from sqlalchemy import inspect, text
+
 from db import db
 from routes.health import health_bp
 from routes.products import products_bp
@@ -10,6 +12,7 @@ from routes.wechat import wechat_bp
 from routes.auth import auth_bp
 from routes.user import user_bp
 from routes.orders import orders_bp
+from routes.admin import admin_bp
 from services.messages import save_message
 
 # 确保模型在 db.create_all() 前被加载
@@ -51,6 +54,7 @@ app.register_blueprint(wechat_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(user_bp)
 app.register_blueprint(orders_bp)
+app.register_blueprint(admin_bp)
 
 
 # 配置已从config.py导入
@@ -154,6 +158,24 @@ if __name__ == "__main__":
     if not os.path.exists(MESSAGE_LOG_FILE):
         save_message([])
     with app.app_context():
+        try:
+            inspector = inspect(db.engine)
+            if inspector.has_table("users"):
+                cols = {c.get("name") for c in inspector.get_columns("users")}
+                if "is_admin" not in cols:
+                    try:
+                        db.session.execute(text("ALTER TABLE users ADD COLUMN is_admin BOOLEAN NOT NULL DEFAULT 0"))
+                        db.session.execute(text("CREATE INDEX ix_users_is_admin ON users (is_admin)"))
+                        db.session.commit()
+                    except Exception:
+                        db.session.rollback()
+                        try:
+                            db.session.execute(text("ALTER TABLE users ADD COLUMN is_admin INTEGER NOT NULL DEFAULT 0"))
+                            db.session.commit()
+                        except Exception:
+                            db.session.rollback()
+        except Exception:
+            db.session.rollback()
         db.create_all()
     # 运行本地服务器
     app.run(host=HOST, port=PORT, debug=DEBUG)

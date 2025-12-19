@@ -151,7 +151,8 @@ const submitOrder = async () => {
     router.push('/orders')
   } catch (error) {
     console.error('提交订单失败', error)
-    ElMessage.error(error?.message || '提交订单失败，请稍后重试')
+    const backendMsg = error?.response?.data?.error
+    ElMessage.error(backendMsg || error?.message || '提交订单失败，请稍后重试')
   } finally {
     loading.value = false
   }

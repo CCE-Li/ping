@@ -11,6 +11,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.String(255), nullable=False)
+    is_admin = db.Column(db.Boolean, nullable=False, default=False, index=True)
     created_at = db.Column(db.Integer, nullable=False, default=lambda: int(time.time()))
 
     def set_password(self, password: str) -> None:
@@ -23,5 +24,6 @@ class User(db.Model):
         return {
             "id": self.id,
             "username": self.username,
+            "is_admin": bool(self.is_admin),
             "created_at": self.created_at,
         }

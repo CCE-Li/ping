@@ -46,6 +46,10 @@
                   <div class="text-sm text-gray-700">¥{{ formatAmount(it.subtotal) }}</div>
                 </div>
               </div>
+
+              <div v-if="o.status === 'pending'" class="mt-3 flex justify-end">
+                <el-button size="small" type="primary" :loading="payingId === o.id" @click="pay(o)">立即付款</el-button>
+              </div>
             </el-card>
           </div>
         </div>
@@ -67,6 +71,7 @@ const status = ref('')
 const orders = ref([])
 const loading = ref(false)
 const loadError = ref('')
+const payingId = ref(null)
 
 const formatAmount = (v) => {
   const num = Number(v || 0)
@@ -101,6 +106,25 @@ const fetchOrders = async () => {
 const refresh = async () => {
   await fetchOrders()
   ElMessage.success('已刷新')
+}
+
+const pay = async (order) => {
+  if (!order?.id) return
+  payingId.value = order.id
+  try {
+    const res = await orderApi.payOrder(order.id)
+    if (res?.success) {
+      ElMessage.success('付款成功')
+      await fetchOrders()
+    } else {
+      ElMessage.error(res?.error || '付款失败')
+    }
+  } catch (e) {
+    const backendMsg = e?.response?.data?.error
+    ElMessage.error(backendMsg || e?.message || '付款失败')
+  } finally {
+    payingId.value = null
+  }
 }
 
 const onTabChange = async () => {

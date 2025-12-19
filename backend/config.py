@@ -21,7 +21,7 @@ TRAE_IDE_API_KEY = "your_trae_ide_api_key"  # TRAE IDE生成的API密钥
 # 方案2：字节火山方舟平台（替代TraeCN）
 # 访问：https://www.volcengine.com/product/ark 注册并获取密钥
 VOLC_API_URL = os.getenv("VOLC_API_URL", "https://ark.cn-beijing.volces.com/api/v3/chat/completions")  # 火山方舟API地址
-VOLC_API_KEY = os.getenv("VOLC_API_KEY", "a6743d36-f366-4a03-95a6-f5c052ae8e68")  # 火山方舟API Key
+VOLC_API_KEY = os.getenv("VOLC_API_KEY", "API KEY")  # 火山方舟API Key
 VOLC_SECRET_KEY = os.getenv("VOLC_SECRET_KEY", "")  # 兼容旧配置（火山方舟 Chat Completions 不需要该字段）
 VOLC_MODEL = os.getenv("VOLC_MODEL", "doubao-seed-1-6-flash-250828")  # 火山方舟模型/接入点 ID（控制台创建 Endpoint 后获得）
 

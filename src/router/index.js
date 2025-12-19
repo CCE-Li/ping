@@ -57,6 +57,12 @@ const routes = [
     name: 'Register',
     component: () => import('../views/Register.vue')
   },
+  // 管理后台路由
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('../views/Admin.vue')
+  },
   // 结算页路由 - 设置requiresAuth元信息表示需要登录
   {
     path: '/checkout',

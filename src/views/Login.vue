@@ -1,142 +1,94 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 login-page">
-    <div class="max-w-md w-full space-y-12 bg-white rounded-3xl shadow-2xl overflow-hidden">
-      <div class="px-6 sm:px-12 lg:px-14 py-12 sm:py-14">
-        <div class="text-center mb-16">
-          <h2 class="text-5xl font-bold text-gray-900">用户登录</h2>
-          <p class="mt-6 text-xl text-gray-600">欢迎回来，请登录您的账号</p>
-        </div>
-        
-        <form @submit.prevent="login" class="login-form mt-8 space-y-8 max-w-sm mx-auto">
-          <div class="space-y-6">
-            <div>
-              <label for="username" class="block text-xl font-medium text-gray-700 mb-3">
-                账号
-              </label>
-              <div class="input-wrap">
-                <span class="input-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                <input
-                  id="username"
-                  v-model="formData.username"
-                  type="text"
-                  autocomplete="username"
-                  class="input-field block w-full pl-12 pr-4 py-4 rounded-xl text-lg"
-                  placeholder="请输入手机号"
-                  required
-                >
-              </div>
-            </div>
-            
-            <div>
-              <label for="password" class="block text-xl font-medium text-gray-700 mb-3">
-                密码
-              </label>
-              <div class="input-wrap">
-                <span class="input-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17 11H7a4 4 0 0 0-4 4v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a4 4 0 0 0-4-4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                <input
-                  id="password"
-                  v-model="formData.password"
-                  type="password"
-                  autocomplete="current-password"
-                  class="input-field block w-full pl-12 pr-4 py-4 rounded-xl text-lg"
-                  placeholder="请输入密码"
-                  required
-                  minlength="6"
-                  maxlength="20"
-                >
-              </div>
-            </div>
-          </div>
-          
-          <div>
-            <el-button
-              native-type="submit"
-              type="primary"
-              size="large"
-              class="w-full"
-              :loading="loading"
-              :disabled="loading || faceVerifying"
-            >
-              <span v-if="loading" class="animate-pulse">登录中...</span>
-              <span v-else>登录</span>
-            </el-button>
-          </div>
-          
-          <!-- 分割线 -->
-          <div class="relative my-12">
-            <div class="absolute inset-0 flex items-center">
-              <div class="w-full border-t border-gray-300"></div>
-            </div>
-            <div class="relative flex justify-center text-xl">
-              <span class="px-6 bg-white text-gray-500">或</span>
-            </div>
-          </div>
-          
-          <!-- 人脸快捷登录 -->
-          <div class="mt-12">
-            <div class="border border-gray-200 rounded-2xl p-8 bg-gray-50">
-              <div class="relative w-full h-72 bg-white rounded-xl shadow-sm mb-8 overflow-hidden border border-gray-100">
-                <!-- 摄像头视频流 -->
-                <video 
-                  ref="videoElement" 
-                  class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
-                  autoplay 
-                  playsinline 
-                  muted
-                ></video>
-                <!-- 人脸捕捉画布 -->
-                <canvas 
-                  ref="faceCanvas" 
-                  class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
-                ></canvas>
-                <!-- 状态显示（始终叠加在视频/画布之上） -->
-                <div class="absolute inset-0 w-full h-full flex items-center justify-center bg-black bg-opacity-30 text-white font-medium text-3xl backdrop-blur-sm">
-                  {{ faceVerifyStatus }}
-                </div>
-              </div>
-              <div class="flex gap-6 justify-center">
-                <el-button
-                  type="success"
-                  size="large"
-                  :loading="faceVerifying"
-                  :disabled="faceVerifying || loading"
-                  @click="startFaceLogin"
-                >
-                  <span v-if="faceVerifying" class="animate-pulse">验证中...</span>
-                  <span v-else>人脸快捷登录</span>
-                </el-button>
-                <el-button
-                  v-if="faceVerifying"
-                  type="danger"
-                  size="large"
-                  @click="stopFaceLogin"
-                >
-                  停止验证
-                </el-button>
-              </div>
-            </div>
-          </div>
-          
-          <div class="text-center mt-12">
-            <p class="text-xl text-gray-600">
-              还没有账号？
-              <router-link to="/register" class="text-blue-600 font-medium hover:text-blue-500 ml-3 transition-colors duration-200">
-                立即注册
-              </router-link>
-            </p>
-          </div>
-        </form>
+  <div class="login-shell min-h-screen py-12 px-4 sm:px-8">
+    <div class="login-layout">
+      <div class="login-highlight">
+        <div class="login-highlight__badge">WELCOME BACK</div>
+        <h2>智能商城账户中心</h2>
+        <p>一次登录，畅享所有频道 · 同步购物车、订单与收藏。</p>
+        <ul>
+          <li>实时订单追踪</li>
+          <li>积分权益同步</li>
+          <li>人脸快捷验证</li>
+        </ul>
       </div>
+      <el-card class="login-panel" shadow="never">
+        <div class="login-panel__header">
+          <h3>登录</h3>
+          <p>输入账户信息以继续</p>
+        </div>
+        <el-form :model="formData" @submit.prevent="login" class="login-form">
+          <el-form-item label="账号">
+            <el-input
+              v-model="formData.username"
+              size="large"
+              placeholder="请输入手机号"
+              autocomplete="username"
+            >
+              <template #prefix>
+                <el-icon><User /></el-icon>
+              </template>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input
+              v-model="formData.password"
+              size="large"
+              placeholder="请输入密码"
+              show-password
+              autocomplete="current-password"
+            >
+              <template #prefix>
+                <el-icon><Lock /></el-icon>
+              </template>
+            </el-input>
+          </el-form-item>
+          <el-button
+            type="primary"
+            size="large"
+            class="w-full"
+            native-type="submit"
+            :loading="loading"
+            :disabled="loading || faceVerifying"
+          >
+            <span v-if="loading" class="animate-pulse">登录中...</span>
+            <span v-else>登录</span>
+          </el-button>
+          <div class="login-divider">
+            <span>或使用快捷方式</span>
+          </div>
+          <el-card class="face-card" shadow="hover">
+            <div class="face-card__media">
+              <video ref="videoElement" autoplay playsinline muted></video>
+              <canvas ref="faceCanvas"></canvas>
+              <div class="face-card__overlay">{{ faceVerifyStatus }}</div>
+            </div>
+            <div class="face-card__actions">
+              <el-button
+                type="success"
+                size="large"
+                :loading="faceVerifying"
+                :disabled="faceVerifying || loading"
+                @click="startFaceLogin"
+              >
+                <span v-if="faceVerifying" class="animate-pulse">验证中...</span>
+                <span v-else>人脸快捷登录</span>
+              </el-button>
+              <el-button
+                v-if="faceVerifying"
+                type="danger"
+                size="large"
+                @click="stopFaceLogin"
+              >
+                停止验证
+              </el-button>
+            </div>
+          </el-card>
+          <div class="login-footer">
+            <span>还没有账号？</span>
+            <router-link to="/register">立即注册</router-link>
+          </div>
+        </el-form>
+      </el-card>
     </div>
   </div>
 </template>
@@ -146,6 +98,7 @@ import { ref, onUnmounted, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/userStore'
 import { userApi } from '../utils/api'
+import { User, Lock } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -376,141 +329,202 @@ const stopFaceLogin = async () => {
 }
 </script>
 <style scoped>
-.login-form {
-  width: 100%;
-  max-width: 420px;
-  margin-left: auto;
-  margin-right: auto;
+.login-shell {
+  background: radial-gradient(circle at top left, #eef2ff, transparent 45%),
+    radial-gradient(circle at bottom right, #dbeafe, transparent 40%),
+    linear-gradient(135deg, #f8fafc, #eef2ff);
 }
 
-.input-wrap {
-  position: relative;
+.login-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.input-icon {
-  pointer-events: none;
-  position: absolute;
-  inset-block: 0;
-  left: 0;
-  padding-left: 1rem;
+.login-highlight {
+  border-radius: 30px;
+  padding: 40px;
+  color: #0f172a;
+  background: linear-gradient(135deg, #0ea5e9, #2563eb, #4f46e5);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: 0 30px 60px rgba(37, 99, 235, 0.35);
+}
+
+.login-highlight__badge {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+.login-highlight h2 {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  margin: 0;
+}
+
+.login-highlight p {
+  font-size: 16px;
+  opacity: 0.9;
+  line-height: 1.8;
+}
+
+.login-highlight ul {
+  margin: 12px 0 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.login-highlight li {
   display: flex;
   align-items: center;
-  color: rgba(107, 114, 128, 0.9);
+  gap: 10px;
+  font-weight: 500;
 }
 
-.input-field {
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(209, 213, 219, 0.9);
-  color: rgba(17, 24, 39, 0.92);
-  outline: none;
-  transition: all 0.18s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+.login-highlight li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: white;
+  opacity: 0.85;
 }
 
-.input-field::placeholder {
-  color: rgba(107, 114, 128, 0.85);
+.login-panel {
+  border-radius: 32px;
+  border: 1px solid rgba(203, 213, 225, 0.6);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
 }
 
-.input-field:hover:not(:disabled) {
-  border-color: rgba(156, 163, 175, 0.95);
-  box-shadow: 0 2px 10px rgba(79, 70, 229, 0.06);
+.login-panel__header h3 {
+  font-size: 32px;
+  margin-bottom: 6px;
+  color: #0f172a;
 }
 
-.input-field:focus {
-  border-color: rgba(79, 70, 229, 0.55);
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+.login-panel__header p {
+  color: #64748b;
+  margin: 0;
 }
 
-.input-wrap:focus-within .input-icon {
-  color: rgba(79, 70, 229, 0.9);
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.input-field:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.login-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: 14px;
+  position: relative;
+  margin: 12px 0;
 }
 
-.input-field:-webkit-autofill,
-.input-field:-webkit-autofill:hover,
-.input-field:-webkit-autofill:focus {
-  -webkit-text-fill-color: rgba(17, 24, 39, 0.92);
-  transition: background-color 9999s ease-out 0s;
-  box-shadow: 0 0 0 9999px rgba(255, 255, 255, 0.96) inset;
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-.btn-primary {
-  background-color: #4f46e5;
+.login-divider span {
+  padding: 0 12px;
+}
+
+.face-card {
+  border-radius: 24px;
+  border-color: rgba(226, 232, 240, 0.6);
+}
+
+.face-card__media {
+  position: relative;
+  height: 260px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  background: #0f172a;
+}
+
+.face-card__media video,
+.face-card__media canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.face-card__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
+  font-weight: 500;
+  font-size: 16px;
+  background: rgba(15, 23, 42, 0.45);
+  text-align: center;
+  padding: 0 12px;
+}
+
+.face-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.login-footer {
+  text-align: center;
+  font-size: 15px;
+  color: #475569;
+}
+
+.login-footer a {
+  color: #2563eb;
   font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+  margin-left: 6px;
+  text-decoration: none;
 }
 
-.btn-primary:hover:not(:disabled) {
-  background-color: #4338ca;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+.login-footer a:hover {
+  color: #1d4ed8;
 }
 
-.btn-primary:active:not(:disabled) {
-  transform: translateY(0);
-}
+@media (max-width: 860px) {
+  .login-layout {
+    grid-template-columns: 1fr;
+  }
 
-.btn-primary:disabled {
-  background-color: #94a3b8;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
+  .login-highlight {
+    text-align: center;
+  }
 
-.btn-green {
-  background-color: #10b981;
-  color: white;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
-}
+  .login-highlight__badge {
+    align-self: center;
+  }
 
-.btn-green:hover:not(:disabled) {
-  background-color: #059669;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
-}
+  .login-highlight ul {
+    justify-items: center;
+  }
 
-.btn-green:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.btn-green:disabled {
-  background-color: #94a3b8;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.btn-red {
-  background-color: #ef4444;
-  color: white;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
-}
-
-.btn-red:hover:not(:disabled) {
-  background-color: #dc2626;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
-}
-
-.btn-red:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.text-primary {
-  color: #4f46e5;
+  .login-layout {
+    gap: 24px;
+  }
 }
 </style>

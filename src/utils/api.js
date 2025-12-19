@@ -169,13 +169,16 @@ export const categoryApi = {
 // 商品API
 export const productApi = {
   // 获取所有商品，支持分页
-  getAll: async (page = 1, categoryId = null, keyword = null) => {
+  getAll: async (page = 1, categoryId = null, keyword = null, perPage = null) => {
     try {
       // 添加类型检查，确保page是数字
       const pageNum = typeof page === 'number' ? page : parseInt(page) || 1;
       
       const params = {};
       params.page = pageNum; // 始终添加page参数
+      if (perPage !== null && perPage !== '' && perPage !== undefined) {
+        params.per_page = perPage;
+      }
       if (categoryId !== null && categoryId !== '' && categoryId !== undefined) {
         params.category_id = categoryId;
       }
@@ -435,5 +438,106 @@ export const orderApi = {
       console.error(`获取订单ID: ${orderId} 详情失败:`, error)
       throw error
     }
+  },
+
+  // 支付订单（模拟）
+  payOrder: async (orderId) => {
+    try {
+      const response = await apiClient.post(`/orders/${orderId}/pay`)
+      return response.data
+    } catch (error) {
+      console.error(`支付订单ID: ${orderId} 失败:`, error)
+      throw error
+    }
+  }
+}
+
+export const adminApi = {
+  login: async (credentials) => {
+    const response = await apiClient.post('/admin/login', credentials)
+    return response.data || {}
+  },
+
+  initAdmin: async ({ initKey, username, password }) => {
+    const response = await apiClient.post(
+      '/admin/init',
+      { username, password },
+      {
+        headers: {
+          'X-Admin-Init-Key': initKey
+        }
+      }
+    )
+    return response.data || {}
+  },
+
+  resetProductsStock: async (stock = 100) => {
+    const token = localStorage.getItem('adminToken') || ''
+    const response = await apiClient.post(
+      '/admin/products/stock/reset',
+      { stock },
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      }
+    )
+    return response.data || {}
+  },
+
+  listProducts: async (params = {}) => {
+    const token = localStorage.getItem('adminToken') || ''
+    const response = await apiClient.get('/admin/products', {
+      params,
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+    return response.data || {}
+  },
+
+  createProduct: async (payload) => {
+    const token = localStorage.getItem('adminToken') || ''
+    const response = await apiClient.post('/admin/products', payload, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+    return response.data || {}
+  },
+
+  updateProduct: async (productId, payload) => {
+    const token = localStorage.getItem('adminToken') || ''
+    const response = await apiClient.put(`/admin/products/${productId}`, payload, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+    return response.data || {}
+  },
+
+  deleteProduct: async (productId) => {
+    const token = localStorage.getItem('adminToken') || ''
+    const response = await apiClient.delete(`/admin/products/${productId}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+    return response.data || {}
+  },
+
+  listOrders: async (params = {}) => {
+    const token = localStorage.getItem('adminToken') || ''
+    const response = await apiClient.get('/admin/orders', {
+      params,
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+    return response.data || {}
+  },
+
+  updateOrder: async (orderId, payload) => {
+    const token = localStorage.getItem('adminToken') || ''
+    const response = await apiClient.put(`/admin/orders/${orderId}`, payload, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+    return response.data || {}
+  },
+
+  deleteOrder: async (orderId) => {
+    const token = localStorage.getItem('adminToken') || ''
+    const response = await apiClient.delete(`/admin/orders/${orderId}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+    return response.data || {}
   }
 }

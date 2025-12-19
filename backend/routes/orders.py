@@ -79,7 +79,10 @@ def create_order():
             return jsonify({"success": False, "error": f"product not found: {product_id}"}), 404
 
         if product.stock is not None and product.stock < quantity:
-            return jsonify({"success": False, "error": f"stock not enough: {product_id}"}), 400
+            return jsonify({
+                "success": False,
+                "error": f"stock not enough: {product_id} ({product.name}), stock={int(product.stock)}, need={quantity}",
+            }), 400
 
         price = float(product.price or 0.0)
         subtotal = price * quantity
@@ -99,6 +102,31 @@ def create_order():
             product.stock = int(product.stock) - quantity
 
     order.total_amount = total_amount
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "data": {
+            **order.to_dict(),
+            "items": [i.to_dict() for i in order.items],
+        }
+    })
+
+
+@orders_bp.route("/api/orders/<int:order_id>/pay", methods=["POST"])
+def pay_order(order_id: int):
+    user = _get_current_user()
+    if not user:
+        return jsonify({"success": False, "error": "unauthorized"}), 401
+
+    order = Order.query.get(order_id)
+    if not order or order.user_id != user.id:
+        return jsonify({"success": False, "error": "order not found"}), 404
+
+    if (order.status or "") != "pending":
+        return jsonify({"success": False, "error": "order is not pending"}), 400
+
+    order.status = "shipping"
     db.session.commit()
 
     return jsonify({

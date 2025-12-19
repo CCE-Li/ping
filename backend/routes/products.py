@@ -19,7 +19,12 @@ def get_products():
     page = request.args.get("page", 1, type=int)
     category_id = request.args.get("category_id", None, type=int)
     keyword = request.args.get("keyword", "", type=str) or request.args.get("q", "", type=str)
-    per_page = 10
+    per_page = request.args.get("per_page", 10, type=int)
+
+    if per_page <= 0:
+        per_page = 10
+    if per_page > 200:
+        per_page = 200
 
     query = Product.query
     if category_id is not None:

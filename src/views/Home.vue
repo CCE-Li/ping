@@ -1,299 +1,123 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-    <!-- 轮播图组件 - 优化视觉效果 -->
-    <div 
-      class="relative w-full h-80 md:h-[450px] lg:h-[550px] overflow-hidden"
-      @mouseenter="pauseSlideTimer"
-      @mouseleave="resumeSlideTimer"
-    >
-      <!-- 轮播图片容器 -->
-      <div 
-        class="absolute inset-0 transition-transform duration-1000 ease-out" 
-        :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
-      >
-        <div class="flex h-full">
-          <div v-for="banner in banners" :key="banner.id" class="min-w-full relative">
-            <!-- 轮播图背景图片 -->
-            <img :src="banner.image" alt="Banner" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-3000">
-            <!-- 渐变遮罩 -->
-            <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-black/20 flex items-center">
-              <div class="container mx-auto px-8 md:px-16 max-w-xl">
-                <h2 class="text-white text-3xl md:text-5xl lg:text-[clamp(2.5rem,5vw,4rem)] font-bold mb-4 tracking-tight">
-                  {{ banner.title }}
-                </h2>
-                <p class="text-white/90 text-lg mb-6 md:text-xl">
-                  {{ banner.description || '限时优惠，立即抢购！' }}
-                </p>
-                <button class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-medium transition-all duration-300 hover:shadow-lg hover:-translate-y-1 transform">
-                  立即查看
-                </button>
+  <el-container class="home-page">
+    <el-header class="home-header" height="460px">
+      <el-carousel height="460px" indicator-position="outside" autoplay :interval="6000" @mouseenter="pauseSlideTimer" @mouseleave="resumeSlideTimer">
+        <el-carousel-item v-for="banner in banners" :key="banner.id">
+          <div class="banner" :style="{ backgroundImage: `url(${banner.image})` }">
+            <div class="banner-mask">
+              <div class="banner-content">
+                <div class="banner-title">{{ banner.title }}</div>
+                <div class="banner-desc">{{ banner.description || '限时优惠，立即抢购！' }}</div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <!-- 轮播指示器 -->
-      <div class="absolute bottom-8 left-0 right-0 flex justify-center space-x-2">
-        <button 
-          v-for="(banner, index) in banners" 
-          :key="banner.id"
-          class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full transition-all duration-500 ease-out"
-          :class="index === currentSlide ? 'bg-white w-10 md:w-12' : 'bg-white/50 hover:bg-white/80'"
-          @click="currentSlide = index"
-          @keydown.enter="currentSlide = index"
-          @keydown.space.prevent="currentSlide = index"
-          aria-label="切换到轮播图 {{ index + 1 }}"
-        ></button>
-      </div>
-      <!-- 左右切换按钮 -->
-      <button 
-        class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-        @click="prevSlide"
-        aria-label="上一张"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
-      <button 
-        class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-        @click="nextSlide"
-        aria-label="下一张"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-    </div>
+        </el-carousel-item>
+      </el-carousel>
+    </el-header>
 
-    <!-- 主内容区域 -->
-    <div class="container mx-auto px-4 py-12">
-      <!-- 搜索栏 -->
-      <div class="mb-10">
-        <div class="max-w-2xl">
-          <div class="relative">
-            <input
-              v-model="searchKeyword"
-              type="text"
-              placeholder="搜索商品名称/描述..."
-              class="w-full py-3 px-4 pl-10 pr-24 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              @keydown.enter.prevent="handleSearch"
-            />
-            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <div class="absolute right-2 top-2 flex items-center gap-2">
-              <button
-                v-if="searchKeyword"
-                type="button"
-                class="text-sm text-gray-500 hover:text-gray-700 px-2"
-                @click="clearSearch"
-              >
-                清除
-              </button>
-              <button
-                type="button"
-                class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium"
-                @click="handleSearch"
-              >
-                搜索
-              </button>
-            </div>
+    <el-main class="home-main">
+      <el-row :gutter="16" class="home-toolbar">
+        <el-col :xs="24" :md="16">
+          <el-input v-model="searchKeyword" clearable placeholder="搜索商品名称/描述..." @keyup.enter="handleSearch">
+            <template #append>
+              <el-button type="primary" @click="handleSearch">搜索</el-button>
+            </template>
+          </el-input>
+        </el-col>
+        <el-col :xs="24" :md="8" class="toolbar-right">
+          <el-text type="info">共 {{ totalCount }} 件</el-text>
+        </el-col>
+      </el-row>
+
+      <el-card class="home-section" shadow="never">
+        <template #header>
+          <div class="section-header">
+            <el-text tag="b">热门分类</el-text>
+            <router-link to="/category">
+              <el-button link type="primary">查看全部</el-button>
+            </router-link>
           </div>
-        </div>
-      </div>
+        </template>
+        <el-row :gutter="12">
+          <el-col v-for="category in featuredCategories" :key="category.id" :xs="12" :sm="8" :md="6" :lg="4">
+            <el-card class="category-card" shadow="hover" @click="selectedCategory = category.id">
+              <div class="category-name">{{ category.name }}</div>
+              <el-text type="info" size="small">{{ category.count }} 件商品</el-text>
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-card>
 
-      <!-- 特色分类展示 -->
-      <section class="mb-16">
-        <div class="flex justify-between items-center mb-8">
-          <h2 class="text-2xl md:text-3xl font-bold text-gray-900">热门分类</h2>
-          <router-link to="/category" class="text-primary hover:text-primary/80 font-medium flex items-center gap-1">
-            查看全部
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </router-link>
-        </div>
-        
-        <!-- 分类网格 -->
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          <div 
-            v-for="category in featuredCategories" 
-            :key="category.id"
-            class="relative rounded-xl overflow-hidden shadow-md group h-40 md:h-48 cursor-pointer transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg bg-gray-100"
-            @click="selectedCategory = category.id"
-          >
-            <div class="absolute inset-0 flex items-end bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-              <div class="p-4 w-full">
-                <h3 class="text-white font-bold text-lg">{{ category.name }}</h3>
-                <p class="text-white/80 text-sm">{{ category.count }} 件商品</p>
-              </div>
-            </div>
+      <el-card class="home-section" shadow="never">
+        <template #header>
+          <div class="section-header">
+            <el-text tag="b">分类筛选</el-text>
           </div>
-        </div>
-      </section>
+        </template>
+        <el-segmented v-model="selectedCategory" :options="categoryOptions" size="default" />
+      </el-card>
 
-      <!-- 分类筛选 -->
-      <div class="mb-10">
-        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <h3 class="text-xl font-semibold text-gray-800">商品筛选</h3>
-          <div class="flex items-center gap-3">
-            <span class="text-sm text-gray-500">排序:</span>
-            <select class="form-select px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-              <option>推荐</option>
-              <option>价格: 从低到高</option>
-              <option>价格: 从高到低</option>
-              <option>最新上架</option>
-            </select>
+      <el-card class="home-section" shadow="never">
+        <template #header>
+          <div class="section-header">
+            <el-text tag="b">{{ getCategoryName(selectedCategory) }}商品</el-text>
           </div>
-        </div>
-        
-        <!-- 分类按钮列表 -->
-        <div class="flex flex-wrap gap-2 mb-8">
-          <button 
-            v-for="category in categories" 
-            :key="category.id"
-            class="px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300"
-            :class="selectedCategory === category.id 
-              ? 'bg-primary text-white shadow-md scale-105' 
-              : 'bg-white border border-gray-200 text-gray-700 hover:border-primary/30 hover:shadow-sm'"
-            @click="selectedCategory = category.id"
-          >
-            {{ category.name }}
-          </button>
-        </div>
-      </div>
+        </template>
 
-      <!-- 商品列表 -->
-      <div>
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-semibold text-gray-800">
-            {{ getCategoryName(selectedCategory) }}商品
-          </h3>
-          <span class="text-sm font-medium text-gray-500">
-            共 {{ filteredProducts.length }} 件
-          </span>
-        </div>
-        
-        <!-- 商品网格布局 -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <div 
-            v-for="product in filteredProducts" 
-            :key="product.id"
-            class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-primary/10 group cursor-pointer"
-            @click="goToDetail(product.id)"
-          >
-            <!-- 商品标签 -->
-            <div class="absolute top-3 left-3 z-10">
-              <span v-if="product.discount" class="bg-red-500 text-white text-xs font-medium px-2 py-1 rounded">
-                {{ product.discount }}折
-              </span>
-            </div>
-            
-            <!-- 商品图片容器 -->
-            <div class="h-52 bg-gray-50 overflow-hidden relative flex items-center justify-center p-4">
-              <img 
-                :src="product.image" 
-                alt="商品图片" 
-                class="max-w-full max-h-full object-contain transform transition-transform duration-700 group-hover:scale-110"
-              >
-              <!-- 快速操作按钮 -->
-              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-5 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                <button 
-                  class="bg-white text-gray-800 p-2 rounded-full shadow-md mx-1 transform transition-transform duration-300 hover:scale-110 hover:bg-primary hover:text-white"
-                  @click.stop="addToCart(product)"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                  </svg>
-                </button>
-                <button 
-                  class="bg-white text-gray-800 p-2 rounded-full shadow-md mx-1 transform transition-transform duration-300 hover:scale-110 hover:bg-primary hover:text-white"
-                  @click.stop="quickView(product)"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            
-            <!-- 商品信息区域 -->
-            <div class="p-5">
-              <div class="flex items-center text-xs text-yellow-400 mb-2">
-                <span v-for="n in 5" :key="n" class="mr-0.5">★</span>
-                <span class="ml-2 text-gray-500">{{ product.rating || 5.0 }}</span>
-              </div>
-              <h4 class="font-medium mb-2 line-clamp-2 text-gray-800 hover:text-primary transition-colors">{{ product.name }}</h4>
-              <p class="text-gray-500 text-sm mb-4 line-clamp-2 h-12">{{ product.description }}</p>
-              <div class="flex justify-between items-center">
-                <div>
-                  <span v-if="product.discount" class="text-lg font-bold text-secondary">{{ formatPrice(product.discountPrice) }}</span>
-                  <span v-else class="text-lg font-bold text-secondary">{{ formatPrice(product.price) }}</span>
-                  <span v-if="product.discount" class="text-sm text-gray-400 line-through ml-2">{{ formatPrice(product.originalPrice) }}</span>
+        <el-row :gutter="16">
+          <el-col v-for="product in filteredProducts" :key="product.id" :xs="12" :sm="12" :md="8" :lg="6" :xl="6">
+            <el-card class="product-card" shadow="hover" @click="goToDetail(product.id)">
+              <template #header>
+                <div class="product-header">
+                  <el-tag v-if="product.discount" type="danger" size="small" effect="dark">{{ product.discount }}折</el-tag>
+                  <el-text class="product-title" truncated>{{ product.name }}</el-text>
                 </div>
-                <button 
-                  class="bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300"
-                  @click.stop="addToCart(product)"
-                >
-                  加入购物车
-                </button>
+              </template>
+
+              <div class="product-body">
+                <div class="product-image-wrap">
+                  <img :src="product.image" alt="商品图片" class="product-image" />
+                </div>
+                <el-text type="info" class="product-desc" truncated>{{ product.description }}</el-text>
+                <div class="product-footer">
+                  <div class="product-price">
+                    <el-text type="danger" tag="b">{{ formatPrice(product.discount ? product.discountPrice : product.price) }}</el-text>
+                    <el-text v-if="product.discount" type="info" class="product-origin">{{ formatPrice(product.originalPrice) }}</el-text>
+                  </div>
+                  <div class="product-actions" @click.stop>
+                    <el-button size="small" @click="quickView(product)">快速查看</el-button>
+                    <el-button size="small" type="primary" @click="addToCart(product)">加入购物车</el-button>
+                  </div>
+                </div>
               </div>
+            </el-card>
+          </el-col>
+        </el-row>
+
+        <div class="load-more">
+          <el-button v-if="hasMoreProducts" type="primary" plain @click="loadMore">加载更多</el-button>
+        </div>
+      </el-card>
+
+      <el-dialog v-model="quickViewVisible" width="860px" :title="quickViewProduct?.name || '快速查看'" @closed="closeQuickView">
+        <el-row :gutter="16" v-if="quickViewProduct">
+          <el-col :xs="24" :md="12">
+            <div class="dialog-image-wrap">
+              <img :src="quickViewProduct.image" :alt="quickViewProduct.name" class="dialog-image" />
             </div>
-          </div>
-        </div>
-        
-        <!-- 加载更多按钮 -->
-        <div class="mt-12 text-center">
-          <button v-if="hasMoreProducts" @click="loadMore" class="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-8 py-3 rounded-lg font-medium transition-all duration-300 inline-flex items-center gap-2">
-            加载更多
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 快速查看弹窗 -->
-    <div 
-      v-if="quickViewProduct" 
-      class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
-      @click="closeQuickView"
-    >
-      <div class="bg-white rounded-xl max-w-3xl w-full max-h-[80vh] overflow-y-auto" @click.stop>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-          <div class="h-72 bg-gray-50 flex items-center justify-center">
-            <img :src="quickViewProduct.image" :alt="quickViewProduct.name" class="max-w-full max-h-full object-contain">
-          </div>
-          <div>
-            <h3 class="text-2xl font-bold mb-3">{{ quickViewProduct.name }}</h3>
-            <p class="text-gray-600 mb-4">{{ quickViewProduct.description }}</p>
-            <div class="flex items-center mb-4">
-              <span class="text-2xl font-bold text-secondary">¥{{ parseFloat(quickViewProduct.price || 0).toFixed(2) }}</span>
+          </el-col>
+          <el-col :xs="24" :md="12">
+            <el-text type="info">{{ quickViewProduct.description }}</el-text>
+            <div class="dialog-price">
+              <el-text type="danger" tag="b">¥{{ parseFloat(quickViewProduct.price || 0).toFixed(2) }}</el-text>
             </div>
-            <button 
-              class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 w-full mb-3"
-              @click="addToCart(quickViewProduct); closeQuickView()"
-            >
-              加入购物车
-            </button>
-            <button 
-              class="border border-gray-300 hover:border-primary hover:text-primary text-gray-700 px-6 py-3 rounded-lg font-medium transition-all duration-300 w-full"
-              @click="goToDetail(quickViewProduct.id); closeQuickView()"
-            >
-              查看详情
-            </button>
-          </div>
-        </div>
-        <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700" @click="closeQuickView">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
+            <el-button type="primary" class="dialog-btn" @click="addToCart(quickViewProduct)">加入购物车</el-button>
+            <el-button class="dialog-btn" @click="goToDetail(quickViewProduct.id); closeQuickView()">查看详情</el-button>
+          </el-col>
+        </el-row>
+      </el-dialog>
+    </el-main>
+  </el-container>
 </template>
 
 <script setup>
@@ -302,6 +126,7 @@ import { useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cartStore'
 import { productApi, categoryApi } from '../utils/api'
 import { getProductCategoryName, formatPrice, transformProductsData } from '../utils/productDataUtils'
+import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -317,12 +142,22 @@ const categories = ref([])
 const featuredCategories = ref([])
 const selectedCategory = ref('')
 const quickViewProduct = ref(null)
+const quickViewVisible = ref(false)
 const products = ref([])
 const currentPage = ref(1)
-const totalPages = ref(1)
+const totalCount = ref(0)
 const hasMoreProducts = ref(true)
 const searchKeyword = ref('')
 const activeKeyword = ref('')
+
+const categoryOptions = computed(() => {
+  return (categories.value || []).map(c => ({ label: c.name, value: c.id }))
+})
+
+const fetchCategoryCount = async (categoryId) => {
+  const resp = await productApi.getAll(1, categoryId, null, 1)
+  return resp.count || 0
+}
 
 // 从API获取数据
 const fetchData = async (reset = false) => {
@@ -330,6 +165,7 @@ const fetchData = async (reset = false) => {
     if (reset) {
       currentPage.value = 1;
       products.value = [];
+      totalCount.value = 0;
       hasMoreProducts.value = true;
     }
     
@@ -351,24 +187,29 @@ const fetchData = async (reset = false) => {
     // 后端按 category_id 过滤
     const selectedCategoryId = selectedCategory.value
     
-    const productsResponse = await productApi.getAll(currentPage.value, selectedCategoryId, activeKeyword.value || null);
+    const productsResponse = await productApi.getAll(currentPage.value, selectedCategoryId, activeKeyword.value || null, 20);
     const newProducts = productsResponse.results || [];
     const transformedProducts = transformProductsData(newProducts);
 
     products.value = reset ? transformedProducts : [...products.value, ...transformedProducts];
     
     currentPage.value += 1;
-    totalPages.value = Math.ceil((productsResponse.count || 0) / 10);
-    hasMoreProducts.value = currentPage.value <= totalPages.value;
+    totalCount.value = productsResponse.count || 0;
+    hasMoreProducts.value = products.value.length < totalCount.value;
     
     // 创建特色分类（从分类中选择前几个）
-    featuredCategories.value = categories.value
+    const featuredBase = categories.value
       .filter(c => c.id !== '')
       .slice(0, 5)
-      .map(category => ({
+
+    const featuredCounts = await Promise.all(
+      featuredBase.map(c => fetchCategoryCount(c.id))
+    )
+
+    featuredCategories.value = featuredBase.map((category, idx) => ({
       id: category.id,
       name: category.name,
-      count: products.value.filter(p => String(p.category?.id) === String(category.id)).length,
+      count: featuredCounts[idx] || 0,
       image: `https://picsum.photos/id/${category.id + 10}/300/300` // 使用分类ID作为图片ID
     }));
   } catch (error) {
@@ -418,7 +259,7 @@ let slideTimer = null
 onMounted(() => {
   startSlideTimer()
   fetchData()
-  document.body.style.overflow = quickViewProduct.value ? 'hidden' : ''
+  document.body.style.overflow = quickViewVisible.value ? 'hidden' : ''
 })
 
 // 监听分类变化，重新获取商品数据
@@ -448,7 +289,7 @@ onUnmounted(() => {
   if (slideTimer) clearInterval(slideTimer)
 })
 
-watch(quickViewProduct, (val) => {
+watch(quickViewVisible, (val) => {
   document.body.style.overflow = val ? 'hidden' : ''
 })
 
@@ -484,21 +325,172 @@ const goToDetail = (id) => {
 
 // 添加到购物车
 const addToCart = (product) => {
-  cartStore.addToCart(product)
-  // TODO: 替换为 Toast 提示
-  alert('🎉 已成功添加到购物车！')
+  const pid = Number(product?.id)
+  if (!pid) {
+    ElMessage.error('商品信息异常，加入购物车失败')
+    return
+  }
+
+  const finalPrice = product?.discount ? (Number(product?.discountPrice) || Number(product?.price) || 0) : (Number(product?.price) || 0)
+  cartStore.addToCart({
+    ...product,
+    id: pid,
+    price: finalPrice,
+  })
+  ElMessage.success('已成功添加到购物车！')
 }
 
 const quickView = (product) => {
   quickViewProduct.value = product
+  quickViewVisible.value = true
 }
 
 const closeQuickView = () => {
+  quickViewVisible.value = false
   quickViewProduct.value = null
 }
 </script>
 
 <style scoped>
+.home-page {
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+.home-header {
+  padding: 0;
+}
+.home-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+.home-toolbar {
+  margin-bottom: 16px;
+}
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.home-section {
+  margin-bottom: 16px;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.banner {
+  height: 460px;
+  background-size: cover;
+  background-position: center;
+}
+.banner-mask {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.1));
+  display: flex;
+  align-items: center;
+}
+.banner-content {
+  padding-left: 48px;
+  color: #fff;
+  max-width: 520px;
+}
+.banner-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.banner-desc {
+  font-size: 16px;
+  opacity: 0.92;
+  margin-bottom: 18px;
+}
+.category-card {
+  cursor: pointer;
+  text-align: center;
+}
+.category-name {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.product-card {
+  cursor: pointer;
+}
+.product-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.product-title {
+  flex: 1;
+}
+.product-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.product-image-wrap {
+  height: 180px;
+  background: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.product-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.product-desc {
+  min-height: 22px;
+}
+.product-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+}
+.product-price {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.product-origin {
+  text-decoration: line-through;
+  font-size: 12px;
+}
+.product-actions {
+  display: flex;
+  gap: 8px;
+}
+.load-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+.dialog-image-wrap {
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 8px;
+}
+.dialog-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.dialog-price {
+  margin: 16px 0;
+}
+.dialog-btn {
+  width: 100%;
+  margin-bottom: 10px;
+}
 ::-webkit-scrollbar {
   width: 6px;
 }
