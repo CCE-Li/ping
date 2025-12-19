@@ -3,7 +3,9 @@ import secrets
 from flask import Blueprint, jsonify, request
 
 from db import db
+from models.auth_token import AuthToken
 from models.user import User
+from state import token_to_user_id
 
 
 auth_bp = Blueprint("auth", __name__)
@@ -28,6 +30,9 @@ def register():
     db.session.commit()
 
     token = secrets.token_urlsafe(32)
+    token_to_user_id[token] = user.id
+    db.session.add(AuthToken(token=token, user_id=user.id))
+    db.session.commit()
     return jsonify({"success": True, "user": user.to_public_dict(), "token": token})
 
 
@@ -45,4 +50,7 @@ def login():
         return jsonify({"success": False, "error": "invalid username or password"}), 401
 
     token = secrets.token_urlsafe(32)
+    token_to_user_id[token] = user.id
+    db.session.add(AuthToken(token=token, user_id=user.id))
+    db.session.commit()
     return jsonify({"success": True, "user": user.to_public_dict(), "token": token})

@@ -102,7 +102,8 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cartStore'
 import { useUserStore } from '../stores/userStore'
-import request from '../utils/request'
+import { ElMessage } from 'element-plus'
+import { orderApi } from '../utils/api'
 import { formatPrice } from '../utils/productDataUtils'
 
 const router = useRouter()
@@ -129,25 +130,28 @@ const submitOrder = async () => {
   
   loading.value = true
   try {
-    // 模拟提交订单，实际应该调用API
-    // const orderData = {
-    //   items: cartStore.items,
-    //   ...orderInfo.value,
-    //   totalPrice: cartStore.totalPrice
-    // }
-    // const response = await request.post('/orders', orderData)
-    
-    // 模拟提交成功
-    setTimeout(() => {
-      alert('订单提交成功')
-      // 清空购物车
-      cartStore.clearCart()
-      // 跳转到首页
-      router.push('/')
-    }, 1000)
+    const items = cartStore.items.map(it => ({
+      product_id: it.id,
+      quantity: it.quantity
+    }))
+
+    const res = await orderApi.createOrder({
+      recipient: orderInfo.value.recipient,
+      phone: orderInfo.value.phone,
+      address: orderInfo.value.address,
+      items
+    })
+
+    if (!res?.success) {
+      throw new Error(res?.error || '订单提交失败')
+    }
+
+    ElMessage.success('订单提交成功')
+    cartStore.clearCart()
+    router.push('/orders')
   } catch (error) {
     console.error('提交订单失败', error)
-    alert('提交订单失败，请稍后重试')
+    ElMessage.error(error?.message || '提交订单失败，请稍后重试')
   } finally {
     loading.value = false
   }

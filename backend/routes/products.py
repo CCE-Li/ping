@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from sqlalchemy import or_
 
 from db import db
 from models.category import Category
@@ -17,11 +18,21 @@ def get_categories():
 def get_products():
     page = request.args.get("page", 1, type=int)
     category_id = request.args.get("category_id", None, type=int)
+    keyword = request.args.get("keyword", "", type=str) or request.args.get("q", "", type=str)
     per_page = 10
 
     query = Product.query
     if category_id is not None:
         query = query.filter(Product.category_id == category_id)
+
+    if keyword:
+        like = f"%{keyword.strip()}%"
+        query = query.filter(
+            or_(
+                Product.name.ilike(like),
+                Product.description.ilike(like),
+            )
+        )
 
     total_count = query.count()
     items = (

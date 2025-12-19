@@ -68,6 +68,41 @@
 
     <!-- 主内容区域 -->
     <div class="container mx-auto px-4 py-12">
+      <!-- 搜索栏 -->
+      <div class="mb-10">
+        <div class="max-w-2xl">
+          <div class="relative">
+            <input
+              v-model="searchKeyword"
+              type="text"
+              placeholder="搜索商品名称/描述..."
+              class="w-full py-3 px-4 pl-10 pr-24 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              @keydown.enter.prevent="handleSearch"
+            />
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <div class="absolute right-2 top-2 flex items-center gap-2">
+              <button
+                v-if="searchKeyword"
+                type="button"
+                class="text-sm text-gray-500 hover:text-gray-700 px-2"
+                @click="clearSearch"
+              >
+                清除
+              </button>
+              <button
+                type="button"
+                class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium"
+                @click="handleSearch"
+              >
+                搜索
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- 特色分类展示 -->
       <section class="mb-16">
         <div class="flex justify-between items-center mb-8">
@@ -286,6 +321,8 @@ const products = ref([])
 const currentPage = ref(1)
 const totalPages = ref(1)
 const hasMoreProducts = ref(true)
+const searchKeyword = ref('')
+const activeKeyword = ref('')
 
 // 从API获取数据
 const fetchData = async (reset = false) => {
@@ -314,7 +351,7 @@ const fetchData = async (reset = false) => {
     // 后端按 category_id 过滤
     const selectedCategoryId = selectedCategory.value
     
-    const productsResponse = await productApi.getAll(currentPage.value, selectedCategoryId);
+    const productsResponse = await productApi.getAll(currentPage.value, selectedCategoryId, activeKeyword.value || null);
     const newProducts = productsResponse.results || [];
     const transformedProducts = transformProductsData(newProducts);
 
@@ -388,6 +425,19 @@ onMounted(() => {
 watch(selectedCategory, () => {
   fetchData(true)
 })
+
+watch(activeKeyword, () => {
+  fetchData(true)
+})
+
+const handleSearch = () => {
+  activeKeyword.value = searchKeyword.value.trim()
+}
+
+const clearSearch = () => {
+  searchKeyword.value = ''
+  activeKeyword.value = ''
+}
 
 // 加载更多商品
 const loadMore = () => {

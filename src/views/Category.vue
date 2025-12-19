@@ -15,8 +15,19 @@
           <input 
             type="text" 
             placeholder="搜索商品或分类..." 
+            v-model="searchKeyword"
+            @keydown.enter.prevent="handleSearch"
             class="w-full py-3 px-4 pl-10 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
           >
+          <button
+            v-if="searchKeyword"
+            type="button"
+            class="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600"
+            @click="clearSearch"
+            aria-label="清除搜索"
+          >
+            ×
+          </button>
           <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
@@ -94,6 +105,7 @@ const categories = ref([{ id: '', name: '全部分类' }])
 const products = ref([])
 const loading = ref(false)
 const loadError = ref('')
+const searchKeyword = ref('')
 
 // 从API获取数据
 const fetchData = async () => {
@@ -109,7 +121,8 @@ const fetchData = async () => {
     
     // 获取商品数据（后端支持 category_id 过滤）
     const categoryId = selectedCategory.value || null
-    const productsResponse = await productApi.getAll(1, categoryId)
+    const keyword = searchKeyword.value.trim() || null
+    const productsResponse = await productApi.getAll(1, categoryId, keyword)
     products.value = productsResponse.results || []
   } catch (error) {
     console.error('获取分类和商品数据失败:', error)
@@ -117,6 +130,15 @@ const fetchData = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const handleSearch = async () => {
+  await fetchData()
+}
+
+const clearSearch = async () => {
+  searchKeyword.value = ''
+  await fetchData()
 }
 
 const handleCategoryClick = async (categoryId) => {

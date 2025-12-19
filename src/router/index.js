@@ -64,6 +64,13 @@ const routes = [
     component: () => import('../views/Checkout.vue'),
     meta: { requiresAuth: true }
   },
+  // 订单列表路由
+  {
+    path: '/orders',
+    name: 'Orders',
+    component: () => import('../views/Orders.vue'),
+    meta: { requiresAuth: true }
+  },
   // 处理/hybridaction/...路径的通配符路由
   {
     path: '/hybridaction/:pathMatch(.*)*',

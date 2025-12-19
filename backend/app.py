@@ -8,12 +8,18 @@ from routes.products import products_bp
 from routes.ai import ai_bp
 from routes.wechat import wechat_bp
 from routes.auth import auth_bp
+from routes.user import user_bp
+from routes.orders import orders_bp
 from services.messages import save_message
 
 # 确保模型在 db.create_all() 前被加载
 from models.user import User  # noqa: F401
 from models.category import Category  # noqa: F401
 from models.product import Product  # noqa: F401
+from models.user_profile import UserProfile  # noqa: F401
+from models.auth_token import AuthToken  # noqa: F401
+from models.order import Order  # noqa: F401
+from models.order_item import OrderItem  # noqa: F401
 
 # 导入配置文件
 from config import *
@@ -43,6 +49,8 @@ app.register_blueprint(products_bp)
 app.register_blueprint(ai_bp)
 app.register_blueprint(wechat_bp)
 app.register_blueprint(auth_bp)
+app.register_blueprint(user_bp)
+app.register_blueprint(orders_bp)
 
 
 # 配置已从config.py导入

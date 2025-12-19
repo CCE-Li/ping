@@ -169,7 +169,7 @@ export const categoryApi = {
 // 商品API
 export const productApi = {
   // 获取所有商品，支持分页
-  getAll: async (page = 1, categoryId = null) => {
+  getAll: async (page = 1, categoryId = null, keyword = null) => {
     try {
       // 添加类型检查，确保page是数字
       const pageNum = typeof page === 'number' ? page : parseInt(page) || 1;
@@ -178,6 +178,9 @@ export const productApi = {
       params.page = pageNum; // 始终添加page参数
       if (categoryId !== null && categoryId !== '' && categoryId !== undefined) {
         params.category_id = categoryId;
+      }
+      if (keyword !== null && keyword !== '' && keyword !== undefined) {
+        params.keyword = keyword;
       }
       
       if (import.meta.env.DEV) {
@@ -335,6 +338,18 @@ export const userApi = {
       console.error('获取用户信息失败:', error)
       throw error
     }
+  },
+
+  // 获取用户资料
+  getProfile: async () => {
+    const response = await apiClient.get('/user')
+    return response.data || {}
+  },
+
+  // 更新用户资料
+  updateProfile: async (profile) => {
+    const response = await apiClient.put('/user', profile)
+    return response.data || {}
   }
 }
 
@@ -399,9 +414,11 @@ export const orderApi = {
   },
   
   // 获取订单列表
-  getOrders: async () => {
+  getOrders: async (status = '') => {
     try {
-      const response = await apiClient.get('/orders')
+      const params = {}
+      if (status) params.status = status
+      const response = await apiClient.get('/orders', { params })
       return response.data
     } catch (error) {
       console.error('获取订单列表失败:', error)
