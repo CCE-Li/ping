@@ -1,11 +1,17 @@
 // 导入Vue Router的创建函数
 import { createRouter, createWebHistory } from 'vue-router'
 
-// 定义路由配置数组
+// 导入各个页面组件
 const routes = [
-  // 首页路由
+  // 新的首页路由 - 店铺首页
   {
     path: '/',
+    name: 'ShopHome',
+    component: () => import('../views/ShopHome.vue')
+  },
+  // 旧的首页路由 - 保持兼容性
+  {
+    path: '/home',
     name: 'Home',
     component: () => import('../views/Home.vue')
   },
@@ -68,7 +74,7 @@ const routes = [
   {
     path: '/hybridaction/:pathMatch(.*)*',
     name: 'HybridAction',
-    component: () => import('../views/Home.vue') // 使用Home组件作为兜底
+    component: () => import('../views/ShopHome.vue') // 使用新的首页组件作为兜底
   },
   // 动态标签管理示例路由
   {
@@ -76,6 +82,12 @@ const routes = [
     name: 'DynamicFrameExample',
     component: () => import('../components/DynamicFrameExample.vue')
   },
+  // 404路由 - 处理所有未匹配的路径
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    redirect: '/'
+  }
 ]
 
 // 创建路由实例

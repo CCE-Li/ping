@@ -373,6 +373,11 @@ console.log('注册Element Plus...')
 app.use(ElementPlus)
 console.log('Element Plus注册成功')
 
+// 导入WindiCSS
+import 'virtual:windi.css'
+// 导入WindiCSS配置
+import 'virtual:windi/config'
+
 //// 集成环境检测工具
 window.environmentDetector = environmentDetector
 window.getEnvironmentInfo = getEnvironmentInfo
@@ -507,10 +512,3 @@ if (appElement && !appElement.__vue_app__) {
 } else {
   console.warn('Vue应用已经挂载或#app元素不存在')
 }
-
-// 优化：只使用异步语言检测，避免同步调用的性能问题
-console.time('detectPageLangAsync');
-window.detectPageLangAsync().then(lang => {
-  console.timeEnd('detectPageLangAsync');
-  console.log('Detected language (async):', lang);
-});

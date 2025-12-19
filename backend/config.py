@@ -50,7 +50,7 @@ MAX_QUEUE_LENGTH = 10  # 最大排队人数
 MYSQL_HOST = os.getenv("MYSQL_HOST", "127.0.0.1") #数据库地址
 MYSQL_PORT = int(os.getenv("MYSQL_PORT", "3306")) #端口
 MYSQL_USER = os.getenv("MYSQL_USER", "root") #你的数据库账号
-MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "liyixin23") # 输入你自己的数库密码
+MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "123456") # 输入你自己的数库密码
 MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "shopping_platform") #数据库名称
 
 SQLALCHEMY_DATABASE_URI = os.getenv(

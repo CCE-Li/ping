@@ -1,133 +1,149 @@
 <template>
-  <div class="min-h-screen bg-gray-50 pb-20 container mx-auto max-w-md">
-    <!-- 页面标题 -->
-    <div class="bg-white shadow-sm">
-      <div class="container mx-auto px-4 py-4">
-        <h1 class="text-xl font-bold text-gray-800">个人中心</h1>
-      </div>
-    </div>
-    
-    <!-- 用户信息卡片 -->
-    <div class="container mx-auto px-4 py-4">
-      <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
-        <div class="p-6 flex items-center">
-          <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
-            <img v-if="userStore.isLoggedIn" :src="userAvatar" alt="用户头像" class="w-full h-full object-cover">
-            <div v-else class="h-10 w-10 text-gray-400 flex items-center justify-center font-bold">
-              {{ userStore.username?.charAt(0) || '?' }}
+  <div class="profile-page min-h-screen bg-gray-50 py-8">
+    <div class="wrapper">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold mb-6 text-gray-800">个人中心</h1>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <!-- 侧边栏 -->
+          <div class="lg:col-span-1">
+            <div class="bg-gray-50 rounded-lg p-6 text-center">
+              <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="text-primary text-2xl">👤</span>
+              </div>
+              <h2 class="text-lg font-medium text-gray-800">用户名</h2>
+              <p class="text-gray-500 text-sm mt-1">普通会员</p>
+              
+              <div class="mt-6 space-y-2">
+                <button 
+                  v-for="item in menuItems" 
+                  :key="item.key"
+                  class="w-full text-left px-4 py-2 rounded-md transition-colors"
+                  :class="activeMenu === item.key ? 'bg-primary text-white' : 'hover:bg-gray-100'"
+                  @click="activeMenu = item.key"
+                >
+                  {{ item.label }}
+                </button>
+              </div>
             </div>
           </div>
-          <div class="ml-4 flex-1">
-            <h2 class="text-lg font-bold text-gray-800">
-              {{ userStore.isLoggedIn ? userStore.username : '请登录' }}
-            </h2>
-            <p v-if="!userStore.isLoggedIn" class="text-sm text-gray-500">登录后享受更多服务</p>
-            <p v-else class="text-sm text-gray-500">普通会员 | ID: {{ userId }}</p>
-          </div>
-          <button v-if="!userStore.isLoggedIn" class="bg-primary text-white px-4 py-2 rounded-full text-sm" @click="goToLogin">
-            立即登录
-          </button>
-          <button v-else class="text-primary bg-primary/10 px-4 py-2 rounded-full text-sm">
-            编辑资料
-          </button>
-        </div>
-      </div>
-      
-      <!-- 订单状态 -->
-      <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
-        <div class="p-4 border-b">
-          <h3 class="font-medium text-gray-800">我的订单</h3>
-        </div>
-        <div class="grid grid-cols-4 py-4">
-          <div class="flex flex-col items-center p-2" @click="goToOrders('pending')">
-            <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-1">
-              <span class="text-sm font-bold text-gray-700">1</span>
+          
+          <!-- 主内容区 -->
+          <div class="lg:col-span-3">
+            <div class="bg-gray-50 rounded-lg p-6">
+              <!-- 个人信息 -->
+              <div v-if="activeMenu === 'info'" class="space-y-6">
+                <h3 class="text-lg font-medium text-gray-800">个人信息</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="form-label">用户名</label>
+                    <div class="form-input bg-white">用户名</div>
+                  </div>
+                  
+                  <div>
+                    <label class="form-label">手机号</label>
+                    <div class="form-input bg-white">138****8888</div>
+                  </div>
+                  
+                  <div>
+                    <label class="form-label">邮箱</label>
+                    <div class="form-input bg-white">user@example.com</div>
+                  </div>
+                  
+                  <div>
+                    <label class="form-label">注册时间</label>
+                    <div class="form-input bg-white">2023-01-01</div>
+                  </div>
+                </div>
+                
+                <div class="pt-4">
+                  <el-button type="primary">编辑信息</el-button>
+                </div>
+              </div>
+              
+              <!-- 订单管理 -->
+              <div v-if="activeMenu === 'orders'" class="space-y-6">
+                <h3 class="text-lg font-medium text-gray-800">我的订单</h3>
+                
+                <div v-if="orders.length > 0" class="space-y-4">
+                  <div 
+                    v-for="order in orders" 
+                    :key="order.id"
+                    class="bg-white rounded-lg p-4 shadow-sm"
+                  >
+                    <div class="flex justify-between items-center mb-3">
+                      <span class="font-medium">订单号: {{ order.id }}</span>
+                      <el-tag :type="getOrderStatusType(order.status)">
+                        {{ order.status }}
+                      </el-tag>
+                    </div>
+                    
+                    <div class="flex items-center mb-3">
+                      <div class="w-12 h-12 bg-gray-100 rounded flex items-center justify-center mr-3">
+                        <span class="text-gray-400">图片</span>
+                      </div>
+                      <div class="flex-1">
+                        <h4 class="font-medium">{{ order.productName }}</h4>
+                        <p class="text-sm text-gray-500">数量: {{ order.quantity }}</p>
+                      </div>
+                      <div class="text-right">
+                        <div class="font-medium">¥{{ order.total }}</div>
+                      </div>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-2">
+                      <el-button size="small" plain>查看详情</el-button>
+                      <el-button 
+                        v-if="order.status === '待付款'" 
+                        type="primary" 
+                        size="small"
+                      >
+                        立即付款
+                      </el-button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div v-else class="text-center py-8">
+                  <div class="text-4xl mb-3">📦</div>
+                  <p class="text-gray-500">暂无订单</p>
+                </div>
+              </div>
+              
+              <!-- 收货地址 -->
+              <div v-if="activeMenu === 'addresses'" class="space-y-6">
+                <div class="flex justify-between items-center">
+                  <h3 class="text-lg font-medium text-gray-800">收货地址</h3>
+                  <el-button type="primary">新增地址</el-button>
+                </div>
+                
+                <div v-if="addresses.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div 
+                    v-for="address in addresses" 
+                    :key="address.id"
+                    class="bg-white rounded-lg p-4 shadow-sm border"
+                    :class="{ 'border-primary': address.isDefault }"
+                  >
+                    <div class="flex justify-between items-start mb-2">
+                      <h4 class="font-medium">{{ address.name }}</h4>
+                      <el-tag v-if="address.isDefault" type="success" size="small">默认</el-tag>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-1">{{ address.phone }}</p>
+                    <p class="text-gray-600 text-sm">{{ address.fullAddress }}</p>
+                    <div class="flex justify-end space-x-2 mt-3">
+                      <el-button size="small" plain>编辑</el-button>
+                      <el-button size="small" type="danger" plain>删除</el-button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div v-else class="text-center py-8">
+                  <div class="text-4xl mb-3">📍</div>
+                  <p class="text-gray-500">暂无收货地址</p>
+                </div>
+              </div>
             </div>
-            <span class="text-xs text-gray-700">待付款</span>
-            <span v-if="pendingOrders > 0" class="mt-1 w-4 h-4 bg-secondary text-white rounded-full text-xs flex items-center justify-center">
-              {{ pendingOrders }}
-            </span>
-          </div>
-          <div class="flex flex-col items-center p-2" @click="goToOrders('shipping')">
-            <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-1">
-              <span class="text-sm font-bold text-gray-700">2</span>
-            </div>
-            <span class="text-xs text-gray-700">待发货</span>
-          </div>
-          <div class="flex flex-col items-center p-2" @click="goToOrders('delivered')">
-            <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-1">
-              <span class="text-sm font-bold text-gray-700">3</span>
-            </div>
-            <span class="text-xs text-gray-700">待收货</span>
-          </div>
-          <div class="flex flex-col items-center p-2" @click="goToOrders('reviewed')">
-            <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-1">
-              <span class="text-sm font-bold text-gray-700">4</span>
-            </div>
-            <span class="text-xs text-gray-700">待评价</span>
-          </div>
-        </div>
-      </div>
-      
-      <!-- 功能菜单 -->
-      <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
-        <div class="border-b">
-          <div class="flex items-center p-3 border-b last:border-b-0" @click="goToAddress">
-            <div class="w-8 h-8 flex items-center justify-center text-gray-700">
-              <span class="text-sm font-bold text-gray-700">📍</span>
-            </div>
-            <span class="ml-3 flex-1 text-gray-700">收货地址</span>
-            <span class="text-sm font-bold text-gray-400">›</span>
-          </div>
-          <div class="flex items-center p-3 border-b last:border-b-0" @click="goToFavorites">
-            <div class="w-8 h-8 flex items-center justify-center text-gray-700">
-              <span class="text-sm font-bold text-gray-700">❤️</span>
-            </div>
-            <span class="ml-3 flex-1 text-gray-700">我的收藏</span>
-            <span class="text-sm font-bold text-gray-400">›</span>
-          </div>
-          <div class="flex items-center p-3 border-b last:border-b-0" @click="goToCoupons">
-            <div class="w-8 h-8 flex items-center justify-center text-gray-700">
-              <span class="text-sm font-bold text-gray-700">🎫</span>
-            </div>
-            <span class="ml-3 flex-1 text-gray-700">优惠券</span>
-            <div class="flex items-center">
-              <span class="text-xs text-secondary mr-2">{{ availableCoupons }}张可用</span>
-              <span class="text-sm font-bold text-gray-400">›</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- 其他设置 -->
-      <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-        <div class="border-b">
-          <div class="flex items-center p-3 border-b last:border-b-0" @click="openPage1">
-            <div class="w-8 h-8 flex items-center justify-center text-gray-700">
-              <span class="text-sm font-bold text-gray-700">📄</span>
-            </div>
-            <span class="ml-3 flex-1 text-gray-700">商家</span>
-            <span class="text-sm font-bold text-gray-400">›</span>
-          </div>
-          <div class="flex items-center p-3 border-b last:border-b-0" @click="goToSettings">
-            <div class="w-8 h-8 flex items-center justify-center text-gray-700">
-              <span class="text-sm font-bold text-gray-700">⚙️</span>
-            </div>
-            <span class="ml-3 flex-1 text-gray-700">设置</span>
-            <span class="text-sm font-bold text-gray-400">›</span>
-          </div>
-          <div class="flex items-center p-3 border-b last:border-b-0" @click="goToHelp">
-            <div class="w-8 h-8 flex items-center justify-center text-gray-700">
-              <span class="text-sm font-bold text-gray-700">❓</span>
-            </div>
-            <span class="ml-3 flex-1 text-gray-700">帮助与反馈</span>
-            <span class="text-sm font-bold text-gray-400">›</span>
-          </div>
-          <div v-if="userStore.isLoggedIn" class="flex items-center p-3" @click="logout">
-            <div class="w-8 h-8 flex items-center justify-center text-gray-700">
-              <span class="text-sm font-bold text-gray-700">🚪</span>
-            </div>
-            <span class="ml-3 text-red-500">退出登录</span>
           </div>
         </div>
       </div>
@@ -136,86 +152,63 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useUserStore } from '../stores/userStore'
+import { ref, onMounted } from 'vue'
 
-const router = useRouter()
-const userStore = useUserStore()
+const activeMenu = ref('info')
 
-// 模拟数据
-const userId = '10001'
-const userAvatar = 'https://picsum.photos/id/1005/100/100'
-const pendingOrders = 2
-const availableCoupons = 3
+const menuItems = [
+  { key: 'info', label: '个人信息' },
+  { key: 'orders', label: '我的订单' },
+  { key: 'addresses', label: '收货地址' },
+  { key: 'settings', label: '账户设置' }
+]
 
-// 跳转方法
-const goToLogin = () => {
-  router.push('/login')
-}
+// 模拟订单数据
+const orders = ref([
+  { id: '20230601001', productName: '智能手机', quantity: 1, total: '2999.00', status: '待付款' },
+  { id: '20230528001', productName: '无线耳机', quantity: 2, total: '798.00', status: '已发货' },
+  { id: '20230520001', productName: '智能手表', quantity: 1, total: '1299.00', status: '已完成' }
+])
 
-const goToOrders = (status) => {
-  if (!userStore.isLoggedIn) {
-    router.push('/login')
-    return
+// 模拟地址数据
+const addresses = ref([
+  { 
+    id: 1, 
+    name: '张三', 
+    phone: '138****8888', 
+    fullAddress: '北京市朝阳区某某街道某某小区1号楼101室',
+    isDefault: true
+  },
+  { 
+    id: 2, 
+    name: '李四', 
+    phone: '139****9999', 
+    fullAddress: '上海市浦东新区某某路某某大厦201室',
+    isDefault: false
   }
-  // 实际应该跳转到订单列表页面
-  alert(`跳转到${status}订单列表`)
-}
+])
 
-const goToAddress = () => {
-  if (!userStore.isLoggedIn) {
-    router.push('/login')
-    return
-  }
-  alert('跳转到收货地址页面')
-}
-
-const goToFavorites = () => {
-  if (!userStore.isLoggedIn) {
-    router.push('/login')
-    return
-  }
-  alert('跳转到我的收藏页面')
-}
-
-const goToCoupons = () => {
-  if (!userStore.isLoggedIn) {
-    router.push('/login')
-    return
-  }
-  alert('跳转到优惠券页面')
-}
-
-const goToSettings = () => {
-  alert('跳转到设置页面')
-}
-
-const goToHelp = () => {
-  alert('跳转到帮助与反馈页面')
-}
-
-// 打开商家
-const openPage1 = () => {
-  try {
-    const newWindow = window.open('http://localhost:5005/page1', '_blank');
-    if (newWindow) {
-      // 窗口成功打开
-      newWindow.focus();
-    } else {
-      // 窗口可能被浏览器阻止了
-        alert('打开商家失败，可能是因为浏览器阻止了弹出窗口。请检查浏览器的弹出窗口设置。');
-    }
-  } catch (error) {
-    console.error('打开商家时出错:', error);
-      alert('打开商家时出错，请稍后重试。');
+const getOrderStatusType = (status) => {
+  switch (status) {
+    case '待付款': return 'warning'
+    case '已发货': return 'primary'
+    case '已完成': return 'success'
+    case '已取消': return 'info'
+    default: return 'info'
   }
 }
 
-const logout = () => {
-  if (confirm('确定要退出登录吗？')) {
-    userStore.logout()
-    router.push('/login')
-  }
-}
+onMounted(() => {
+  console.log('Profile page mounted')
+})
 </script>
+
+<style scoped>
+.profile-page {
+  min-height: calc(100vh - 140px);
+}
+
+.form-input.bg-white {
+  background-color: #fff;
+}
+</style>

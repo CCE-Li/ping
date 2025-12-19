@@ -1,82 +1,58 @@
 <template>
-  <div class="min-h-screen bg-gray-50 pb-20">
-    <!-- 页面标题 -->
-    <div class="bg-white shadow-sm">
-      <div class="container mx-auto px-4 py-4">
-        <h1 class="text-xl font-bold text-gray-800">商品分类</h1>
-      </div>
-    </div>
-    
-    <!-- 分类内容 -->
-    <div class="container mx-auto px-4 py-6">
-      <!-- 分类搜索 -->
-      <div class="mb-6">
-        <div class="relative">
-          <input 
-            type="text" 
-            placeholder="搜索商品或分类..." 
-            class="w-full py-3 px-4 pl-10 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-          >
-          <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </div>
-      </div>
-      
-      <!-- 分类导航 -->
-      <div class="bg-white rounded-lg shadow-sm p-4 mb-6 relative z-10 pointer-events-auto">
-        <div class="flex overflow-x-auto space-x-4 pb-2 -mx-1 px-1 hide-scrollbar relative z-10 pointer-events-auto">
-          <button 
+  <div class="category-page min-h-screen bg-gray-50 py-8">
+    <div class="wrapper">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold mb-6 text-gray-800">商品分类</h1>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div 
             v-for="category in categories" 
             :key="category.id"
-            class="px-4 py-2 rounded-full whitespace-nowrap transition-all duration-300"
-            :class="selectedCategory === category.id ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
-            type="button"
-            :aria-pressed="String(selectedCategory) === String(category.id)"
-            @click="handleCategoryClick(category.id)"
+            class="category-item card cursor-pointer transform transition-all duration-300 hover:-translate-y-1"
+            @click="selectCategory(category)"
           >
-            {{ category.name }}
-          </button>
-        </div>
-      </div>
-      
-      <div v-if="loading" class="bg-white rounded-lg p-6 text-gray-600 text-sm mb-6">
-        加载中...
-      </div>
-
-      <div v-else-if="loadError" class="bg-white rounded-lg p-6 mb-6">
-        <p class="text-sm text-red-600">{{ loadError }}</p>
-        <button class="mt-3 text-sm text-primary bg-primary/10 px-3 py-1 rounded-full" type="button" @click="fetchData">
-          重试
-        </button>
-      </div>
-
-      <!-- 分类内容展示 -->
-      <div v-else-if="currentCategoryProducts.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <div 
-          v-for="product in currentCategoryProducts" 
-          :key="product.id"
-          class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
-          @click="goToDetail(product.id)"
-        >
-          <div class="h-40 bg-gray-50 flex items-center justify-center relative">
-            <img :src="product.image" alt="商品图片" class="max-w-full max-h-full object-contain p-1 z-10 relative">
-          </div>
-          <div class="p-3">
-            <h3 class="text-sm font-medium text-gray-800 line-clamp-2 mb-1 h-10">
-              {{ product.name }}
-            </h3>
-            <p class="text-secondary font-bold">{{ formatPrice(product.price) }}</p>
+            <div class="p-4 text-center">
+              <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span class="text-primary text-2xl">{{ category.icon || '📦' }}</span>
+              </div>
+              <h3 class="font-medium text-gray-800">{{ category.name }}</h3>
+              <p class="text-xs text-gray-500 mt-1">{{ category.count }} 件商品</p>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <!-- 空状态 -->
-      <div v-else class="bg-white rounded-lg p-8 text-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <p class="text-gray-500">暂无相关商品</p>
+        
+        <div v-if="selectedCategory" class="mt-8">
+          <h2 class="text-xl font-semibold mb-4 text-gray-800">
+            {{ selectedCategory.name }} 商品
+          </h2>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div 
+              v-for="product in categoryProducts" 
+              :key="product.id"
+              class="product-card card cursor-pointer"
+              @click="goToProduct(product.id)"
+            >
+              <div class="h-40 bg-gray-100 flex items-center justify-center">
+                <img :src="product.image" alt="商品图片" class="max-w-full max-h-full object-contain p-1">
+              </div>
+              <div class="p-4">
+                <h3 class="font-medium text-gray-800 mb-1 truncate">{{ product.name }}</h3>
+                <p class="text-sm text-gray-500 mb-3 h-10 overflow-hidden">{{ product.description }}</p>
+                <div class="flex justify-between items-center">
+                  <span class="text-red-500 font-bold">{{ formatPrice(product.price) }}</span>
+                  <el-button 
+                    type="primary" 
+                    size="small" 
+                    @click.stop="addToCart(product)"
+                  >
+                    加入购物车
+                  </el-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -85,13 +61,17 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCartStore } from '../stores/cartStore'
+import { ElMessage } from 'element-plus'
 import { productApi, categoryApi } from '../utils/api'
 import { formatPrice } from '../utils/productDataUtils'
 
 const router = useRouter()
-const selectedCategory = ref('')
-const categories = ref([{ id: '', name: '全部分类' }])
-const products = ref([])
+const cartStore = useCartStore()
+
+const selectedCategory = ref(null)
+const categories = ref([])
+const allProducts = ref([])
 const loading = ref(false)
 const loadError = ref('')
 
@@ -102,15 +82,18 @@ const fetchData = async () => {
     loadError.value = ''
     // 获取分类数据
     const categoriesResponse = await categoryApi.getAll()
-    categories.value = [
-      { id: '', name: '全部分类' },
-      ...(categoriesResponse.results || [])
-    ]
+    categories.value = (categoriesResponse.results || []).map(category => ({
+      ...category,
+      count: 0, // 后续统计实际商品数量
+      icon: getIconForCategory(category.name)
+    }))
     
-    // 获取商品数据（后端支持 category_id 过滤）
-    const categoryId = selectedCategory.value || null
-    const productsResponse = await productApi.getAll(1, categoryId)
-    products.value = productsResponse.results || []
+    // 获取所有商品数据
+    const productsResponse = await productApi.getAll()
+    allProducts.value = productsResponse.results || []
+    
+    // 统计每个分类的商品数量
+    updateCategoryCounts()
   } catch (error) {
     console.error('获取分类和商品数据失败:', error)
     loadError.value = error?.message || '获取分类或商品失败'
@@ -119,33 +102,68 @@ const fetchData = async () => {
   }
 }
 
-const handleCategoryClick = async (categoryId) => {
-  selectedCategory.value = categoryId
-  await fetchData()
+// 根据分类名称获取对应图标
+const getIconForCategory = (name) => {
+  const iconMap = {
+    '电子产品': '📱',
+    '家居用品': '🏠',
+    '服装配饰': '👕',
+    '美妆护肤': '💄',
+    '运动户外': '⚽',
+    '图书文具': '📚',
+    '食品饮料': '🍎',
+    '汽车用品': '🚗'
+  }
+  return iconMap[name] || '📦'
+}
+
+// 更新分类商品计数
+const updateCategoryCounts = () => {
+  categories.value.forEach(category => {
+    const count = allProducts.value.filter(product => product.category_id === category.id).length
+    category.count = count
+  })
+}
+
+// 选择分类
+const selectCategory = (category) => {
+  selectedCategory.value = category
+}
+
+// 计算当前分类的商品
+const categoryProducts = computed(() => {
+  if (!selectedCategory.value) return []
+  return allProducts.value.filter(
+    product => product.category_id === selectedCategory.value.id
+  )
+})
+
+// 跳转到商品详情
+const goToProduct = (productId) => {
+  router.push(`/product/${productId}`)
+}
+
+// 加入购物车
+const addToCart = (product) => {
+  cartStore.addToCart(product)
+  ElMessage.success(`${product.name} 已添加到购物车`)
 }
 
 onMounted(() => {
   fetchData()
 })
-
-// 根据选中的分类筛选商品
-const currentCategoryProducts = computed(() => {
-  return products.value
-})
-
-// 跳转到商品详情
-const goToDetail = (productId) => {
-  router.push(`/product/${productId}`)
-}
 </script>
 
 <style scoped>
-/* 隐藏滚动条但保留功能 */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
+.category-page {
+  min-height: calc(100vh - 140px);
 }
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+
+.category-item:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
 }
 </style>

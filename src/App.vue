@@ -3,10 +3,17 @@
 import Navbar from './components/Navbar.vue'
 // 导入底部导航栏组件
 import BottomNavbar from './components/BottomNavbar.vue'
+// 导入Header和Footer组件
+import Header from './components/Header.vue'
+import ShopFooter from './components/ShopFooter.vue'
 
 // 导入Vue Router的路由管理函数
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+
+// 导入公共样式
+import './assets/base.css'
+import './assets/common.css'
 
 const route = useRoute()
 
@@ -14,14 +21,12 @@ const showNavPages = computed(() => ['/', '/category', '/message', '/cart', '/pr
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <!-- 顶部导航栏组件 - 只在首页、分类、消息、购物车和个人中心页面显示（桌面端） -->
-    <div class="hidden md:block" v-if="showNavPages">
-      <Navbar />
-    </div>
-
+  <div class="min-h-screen flex flex-col bg-gray-50">
+    <!-- 头部组件 -->
+    <Header />
+    
     <!-- 主内容区域 -->
-    <main class="pb-[72px] md:pb-0 md:pt-0">
+    <main class="flex-grow pb-[72px] md:pb-0">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -35,11 +40,7 @@ const showNavPages = computed(() => ['/', '/category', '/message', '/cart', '/pr
     </div>
     
     <!-- 页脚组件 -->
-    <footer v-if="!showNavPages" class="bg-gray-100 py-6 mt-8">
-      <div class="container mx-auto px-4 text-center text-gray-600">
-        <p>&copy; {{ new Date().getFullYear() }} 购物平台. 保留所有权利.</p>
-      </div>
-    </footer>
+    <ShopFooter v-if="!showNavPages" />
   </div>
 </template>
 

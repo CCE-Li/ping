@@ -1,92 +1,96 @@
 <template>
-  <div class="container mx-auto py-8 px-4">
-    <h1 class="text-2xl font-bold mb-6">购物车</h1>
-    
-    <div v-if="cartStore.isEmpty" class="text-center py-16">
-      <p class="text-gray-500 mb-4">您的购物车还是空的</p>
-      <router-link to="/" class="btn-primary inline-block">
-        去购物
-      </router-link>
-    </div>
-    
-    <div v-else>
-      <div class="overflow-x-auto mb-6">
-        <table class="min-w-full bg-white">
-          <thead>
-            <tr class="border-b">
-              <th class="py-3 px-4 text-left">商品信息</th>
-              <th class="py-3 px-4 text-center">单价</th>
-              <th class="py-3 px-4 text-center">数量</th>
-              <th class="py-3 px-4 text-center">小计</th>
-              <th class="py-3 px-4 text-center">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in cartStore.items" :key="item.id" class="border-b">
-              <td class="py-4 px-4">
-                <div class="flex items-center">
-                  <img :src="item.image" alt="商品图片" class="w-8 h-8 object-cover mr-4">
-                  <div>
-                    <h3 class="font-medium line-clamp-2">{{ item.name }}</h3>
-                    <p class="text-gray-500 text-sm line-clamp-1">{{ item.description }}</p>
-                  </div>
-                </div>
-              </td>
-              <td class="py-4 px-4 text-center">{{ formatPrice(item.price) }}</td>
-              <td class="py-4 px-4 text-center">
-                <div class="flex items-center justify-center">
-                  <button 
-                    class="w-8 h-8 border border-gray-300 rounded-l-md flex items-center justify-center" 
-                    @click="updateQuantity(item.id, item.quantity - 1)"
-                  >
-                    -
-                  </button>
-                  <input 
-                    type="number" 
-                    :value="item.quantity" 
-                    class="w-12 h-8 border-t border-b border-gray-300 text-center" 
-                    @change="handleQuantityChange(item.id, $event.target.value)"
-                    min="1"
-                  >
-                  <button 
-                    class="w-8 h-8 border border-gray-300 rounded-r-md flex items-center justify-center" 
-                    @click="updateQuantity(item.id, item.quantity + 1)"
-                  >
-                    +
-                  </button>
-                </div>
-              </td>
-              <td class="py-4 px-4 text-center font-medium">{{ formatPrice(item.price * item.quantity) }}</td>
-              <td class="py-4 px-4 text-center">
-                <button class="text-red-500 hover:text-red-700" @click="removeFromCart(item.id)">
-                  删除
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <div class="flex flex-col md:flex-row justify-end items-end gap-4">
-        <button class="btn-secondary" @click="clearCart">
-          清空购物车
-        </button>
-        <div class="bg-gray-50 p-6 rounded-lg min-w-[300px]">
-          <div class="flex justify-between mb-2">
-            <span>商品总价：</span>
-            <span class="font-medium">{{ formatPrice(cartStore.totalPrice) }}</span>
+  <div class="cart-page min-h-screen bg-gray-50 py-8">
+    <div class="wrapper">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold mb-6 text-gray-800">购物车</h1>
+        
+        <div v-if="cartItems.length > 0">
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b">
+                  <th class="text-left py-3">商品信息</th>
+                  <th class="text-center py-3">单价</th>
+                  <th class="text-center py-3">数量</th>
+                  <th class="text-right py-3">小计</th>
+                  <th class="text-center py-3">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr 
+                  v-for="item in cartItems" 
+                  :key="item.id"
+                  class="border-b hover:bg-gray-50"
+                >
+                  <td class="py-4">
+                    <div class="flex items-center">
+                      <div class="w-16 h-16 bg-gray-100 rounded flex items-center justify-center mr-4">
+                        <span class="text-gray-400">图片</span>
+                      </div>
+                      <div>
+                        <h3 class="font-medium text-gray-800">{{ item.name }}</h3>
+                        <p class="text-sm text-gray-500">{{ item.description }}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-center py-4">
+                    <span class="text-red-500 font-medium">¥{{ item.price }}</span>
+                  </td>
+                  <td class="text-center py-4">
+                    <div class="flex items-center justify-center">
+                      <el-button 
+                        size="small" 
+                        circle 
+                        @click="decreaseQuantity(item)"
+                      >
+                        -
+                      </el-button>
+                      <span class="mx-3 w-10 text-center">{{ item.quantity }}</span>
+                      <el-button 
+                        size="small" 
+                        circle 
+                        @click="increaseQuantity(item)"
+                      >
+                        +
+                      </el-button>
+                    </div>
+                  </td>
+                  <td class="text-right py-4">
+                    <span class="text-red-500 font-bold">¥{{ (item.price * item.quantity).toFixed(2) }}</span>
+                  </td>
+                  <td class="text-center py-4">
+                    <el-button 
+                      type="danger" 
+                      size="small" 
+                      plain
+                      @click="removeFromCart(item)"
+                    >
+                      删除
+                    </el-button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="flex justify-between mb-2">
-            <span>运费：</span>
-            <span>¥0.00</span>
+          
+          <div class="flex justify-between items-center mt-8 pt-6 border-t">
+            <div>
+              <el-button @click="clearCart" type="danger" plain>清空购物车</el-button>
+            </div>
+            <div class="text-right">
+              <div class="mb-2">
+                总计: <span class="text-2xl font-bold text-red-500">¥{{ totalPrice.toFixed(2) }}</span>
+              </div>
+              <el-button type="primary" size="large" @click="checkout">去结算</el-button>
+            </div>
           </div>
-          <div class="flex justify-between text-xl font-bold mt-4 mb-6">
-            <span>合计：</span>
-            <span class="text-secondary">{{ formatPrice(cartStore.totalPrice) }}</span>
-          </div>
-          <router-link to="/checkout" class="btn-primary w-full text-center block">
-            去结算
-          </router-link>
+        </div>
+        
+        <div v-else class="text-center py-12">
+          <div class="text-5xl mb-4">🛒</div>
+          <h3 class="text-xl font-medium text-gray-700 mb-2">购物车为空</h3>
+          <p class="text-gray-500 mb-6">您还没有添加任何商品到购物车</p>
+          <el-button type="primary" @click="$router.push('/')">去逛逛</el-button>
         </div>
       </div>
     </div>
@@ -94,37 +98,80 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cartStore'
-import { formatPrice } from '../utils/productDataUtils'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
+const router = useRouter()
 const cartStore = useCartStore()
 
-// 更新商品数量
-const updateQuantity = (productId, newQuantity) => {
-  if (newQuantity > 0) {
-    cartStore.updateQuantity(productId, newQuantity)
+const cartItems = computed(() => cartStore.items)
+const totalPrice = computed(() => cartStore.totalPrice)
+
+const increaseQuantity = (item) => {
+  cartStore.updateQuantity(item.id, item.quantity + 1)
+}
+
+const decreaseQuantity = (item) => {
+  if (item.quantity > 1) {
+    cartStore.updateQuantity(item.id, item.quantity - 1)
+  } else {
+    removeFromCart(item)
   }
 }
 
-// 处理数量输入框变化
-const handleQuantityChange = (productId, value) => {
-  const newQuantity = parseInt(value)
-  if (!isNaN(newQuantity) && newQuantity > 0) {
-    cartStore.updateQuantity(productId, newQuantity)
-  }
+const removeFromCart = (item) => {
+  ElMessageBox.confirm(
+    `确定要从购物车中删除 ${item.name} 吗？`,
+    '确认删除',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).then(() => {
+    cartStore.removeFromCart(item.id)
+    ElMessage.success('删除成功')
+  }).catch(() => {
+    // 用户取消删除
+  })
 }
 
-// 从购物车移除商品
-const removeFromCart = (productId) => {
-  if (confirm('确定要删除这个商品吗？')) {
-    cartStore.removeFromCart(productId)
-  }
-}
-
-// 清空购物车
 const clearCart = () => {
-  if (confirm('确定要清空购物车吗？')) {
+  ElMessageBox.confirm(
+    '确定要清空购物车吗？',
+    '确认清空',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).then(() => {
     cartStore.clearCart()
+    ElMessage.success('购物车已清空')
+  }).catch(() => {
+    // 用户取消清空
+  })
+}
+
+const checkout = () => {
+  if (cartItems.value.length === 0) {
+    ElMessage.warning('购物车为空，无法结算')
+    return
   }
+  
+  router.push('/checkout')
 }
 </script>
+
+<style scoped>
+.cart-page {
+  min-height: calc(100vh - 140px);
+}
+
+table th {
+  font-weight: 500;
+  color: #666;
+}
+</style>
