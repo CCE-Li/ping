@@ -48,12 +48,40 @@
               </div>
 
               <div v-if="o.status === 'pending'" class="mt-3 flex justify-end">
-                <el-button size="small" type="primary" :loading="payingId === o.id" @click="pay(o)">立即付款</el-button>
+                <el-button size="small" type="primary" :loading="payingId === o.id" @click="openPayDialog(o)">立即付款</el-button>
               </div>
             </el-card>
           </div>
         </div>
       </el-card>
+
+      <el-dialog
+        v-model="payDialogVisible"
+        title="选择付款方式"
+        width="360px"
+        :close-on-click-modal="false"
+        :close-on-press-escape="!confirmPayLoading"
+        :show-close="!confirmPayLoading"
+      >
+        <div class="space-y-3">
+          <el-radio-group v-model="selectedPayMethod" class="flex flex-col gap-2">
+            <el-radio label="wechat">微信支付</el-radio>
+            <el-radio label="alipay">支付宝</el-radio>
+            <el-radio label="bank">银行卡</el-radio>
+          </el-radio-group>
+
+          <div v-if="payDialogOrder" class="text-sm text-gray-600">
+            订单号：{{ payDialogOrder.id }}
+          </div>
+        </div>
+
+        <template #footer>
+          <div class="flex justify-end gap-2">
+            <el-button :disabled="confirmPayLoading" @click="closePayDialog">取消</el-button>
+            <el-button type="primary" :loading="confirmPayLoading" @click="confirmPay">确认付款</el-button>
+          </div>
+        </template>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -72,6 +100,11 @@ const orders = ref([])
 const loading = ref(false)
 const loadError = ref('')
 const payingId = ref(null)
+
+const payDialogVisible = ref(false)
+const payDialogOrder = ref(null)
+const selectedPayMethod = ref('wechat')
+const confirmPayLoading = ref(false)
 
 const formatAmount = (v) => {
   const num = Number(v || 0)
@@ -108,14 +141,32 @@ const refresh = async () => {
   ElMessage.success('已刷新')
 }
 
-const pay = async (order) => {
+const openPayDialog = (order) => {
   if (!order?.id) return
+  payDialogOrder.value = order
+  selectedPayMethod.value = 'wechat'
+  payDialogVisible.value = true
+}
+
+const closePayDialog = () => {
+  if (confirmPayLoading.value) return
+  payDialogVisible.value = false
+  payDialogOrder.value = null
+}
+
+const confirmPay = async () => {
+  const order = payDialogOrder.value
+  if (!order?.id) return
+  confirmPayLoading.value = true
   payingId.value = order.id
   try {
     const res = await orderApi.payOrder(order.id)
     if (res?.success) {
-      ElMessage.success('付款成功')
+      if (selectedPayMethod.value === 'wechat') ElMessage.success('已使用微信支付付款成功')
+      else if (selectedPayMethod.value === 'alipay') ElMessage.success('已使用支付宝付款成功')
+      else ElMessage.success('已使用银行卡付款成功')
       await fetchOrders()
+      closePayDialog()
     } else {
       ElMessage.error(res?.error || '付款失败')
     }
@@ -124,6 +175,7 @@ const pay = async (order) => {
     ElMessage.error(backendMsg || e?.message || '付款失败')
   } finally {
     payingId.value = null
+    confirmPayLoading.value = false
   }
 }
 
